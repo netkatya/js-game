@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function App() {
   return (
-    <main>
-      <div className="min-h-screen bg-slate-950 p-37">
+    <main className="min-w-[1440px]">
+      <div className="bg-[url('/img/bg.jpg')] bg-cover bg-center p-[37] h-[960]">
         <div className="flex  items-center justify-center mb-[105px]">
-          <video
+          {/* <video
             src="/gif/robot.mp4"
             autoPlay
             loop
@@ -14,7 +14,7 @@ export default function App() {
             className=" w-[961px] h-[946px]"
           >
             Ваш браузер не підтримує відео тег.
-          </video>
+          </video> */}
           <div className="font-semibold text-center w-[561px] h-[446px]">
             <h1 className="text-[128px] ">A.R.I</h1>
             <p className="text-[64px]">Artificial Robotic Instructor</p>
