@@ -1,62 +1,72 @@
 [
-    {
-        "id": 21,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 22,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 23,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 24,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 25,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 26,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 27,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 28,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 29,
-        "type": "code",
-        "question": "",
-        "check": ""
-    },
-    {
-        "id": 30,
-        "type": "code",
-        "question": "",
-        "check": ""
-    }
+  {
+    "id": 21,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create a variable x with value 10 and print it in the console",
+    "solution": "let x = 10;\nconsole.log(x);"
+  },
+  {
+    "id": 22,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create a variable name with value 'Alice' and print it in the console",
+    "solution": "let name = 'Alice';\nconsole.log(name);"
+  },
+  {
+    "id": 23,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create two variables a = 7 and b = 3, and print their sum",
+    "solution": "let a = 7;\nlet b = 3;\nconsole.log(a + b);"
+  },
+  {
+    "id": 24,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create two variables a = 15 and b = 4, and print the remainder of a divided by b",
+    "solution": "let a = 15;\nlet b = 4;\nconsole.log(a % b);"
+  },
+  {
+    "id": 25,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create a string variable greeting = 'Hello' and print its first character",
+    "solution": "let greeting = 'Hello';\nconsole.log(greeting[0]);"
+  },
+  {
+    "id": 26,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create variables x = '5' and y = 3. Print the result of x + y",
+    "solution": "let x = '5';\nlet y = 3;\nconsole.log(x + y);"
+  },
+  {
+    "id": 27,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create a variable counter = 10, increase it by 5, and print the result",
+    "solution": "let counter = 10;\ncounter += 5;\nconsole.log(counter);"
+  },
+  {
+    "id": 28,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create two variables base = 2 and exponent = 4, and print base raised to the power of exponent",
+    "solution": "let base = 2;\nlet exponent = 4;\nconsole.log(base ** exponent);"
+  },
+  {
+    "id": 29,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create variables x = 7 and y = '7'. Compare them with == and === and print both results",
+    "solution": "let x = 7;\nlet y = '7';\nconsole.log(x == y);\nconsole.log(x === y);"
+  },
+  {
+    "id": 30,
+    "type": "code",
+    "language": "javascript",
+    "question": "Create an array numbers = [1, 2, 3] and print the sum of the second and third elements",
+    "solution": "let numbers = [1, 2, 3];\nconsole.log(numbers[1] + numbers[2]);"
+  }
 ]
