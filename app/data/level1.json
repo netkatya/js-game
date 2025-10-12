@@ -2,71 +2,71 @@
     {
         "id": 1,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "What will the expression 2 + '2' return",
+        "options": ["4", "'22'", "Error"],
+        "answer": "'22'"
     },
     {
         "id": 2,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "What does the === operator do?",
+        "options": ["Compares values without type checking", "Compares both value and type", "Assigns a value"],
+        "answer": "Compares both value and type"
     },
     {
         "id": 3,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "What will console.log(typeof NaN) output?",
+        "options": ["number", "NaN", "undefined"],
+        "answer": "number"
     },
     {
         "id": 4,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "What happens if you run console.log(x) before let x = 5;?",
+        "options": ["Outputs undefined", "Throws a ReferenceError", "Outputs 5"],
+        "answer": "Throws a ReferenceError"
     },
     {
         "id": 5,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "How to select the first element with the class 'button' in the document?",
+        "options": ["document.querySelector('.button')", "window.querySelector('.button')", "document.getElementsByClass('.button')"],
+        "answer": "document.querySelector('.button')"
     },
     {
         "id": 6,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "Which HTTP method is used to send data to the backend?",
+        "options": ["GET", "PUT", "POST"],
+        "answer": "POST"
     },
     {
         "id": 7,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "What is the type of variable let x;",
+        "options": ["null", "object", "undefined"],
+        "answer": "undefined"
     },
     {
         "id": 8,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "What are the possible states of a Promise?",
+        "options": ["pending, settled, failed", "waiting, fulfilled, rejected", "pending, fulfilled, rejected"],
+        "answer": "pending, fulfilled, rejected"
     },
     {
         "id": 9,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "What does the .catch() method do in a Promise chain?",
+        "options": ["Handles a fulfilled promise", "Handles a rejected promise", "Always runs after .then()"],
+        "answer": "Handles a rejected promise"
     },
     {
         "id": 10,
         "type": "tests",
-        "question": "",
-        "options": ["", "", ""],
-        "answer": ""
+        "question": "Which method is used to read data from localStorage?",
+        "options": ["localStorage.readItem()", "localStorage.getItem()", "localStorage.getData()"],
+        "answer": "localStorage.getItem()"
     }
 ]
