@@ -1,17 +1,17 @@
 [
-  {
+{
     "id": 21,
     "type": "code",
     "language": "javascript",
-    "question": "Create a variable x with value 10 and print it in the console",
-    "solution": "let x = 10;\nconsole.log(x);"
+    "question": "Create a variable name with value 'Alice' and print it in the console",
+    "solution": "let name = 'Alice';\nconsole.log(name);"
   },
   {
     "id": 22,
     "type": "code",
     "language": "javascript",
-    "question": "Create a variable name with value 'Alice' and print it in the console",
-    "solution": "let name = 'Alice';\nconsole.log(name);"
+    "question": "Create an arrow function called greet that prints 'Hello World' in the console. Then call this function.",
+    "solution": "const greet = () => {\nconsole.log('Hello World');\n};\ngreet();"
   },
   {
     "id": 23,
