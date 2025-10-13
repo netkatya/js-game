@@ -8,10 +8,10 @@ export default function Header() {
       <nav>
         <ul className="flex gap-[30px] text-2xl font-semibold">
           <li className="hover:underline">
-            <Link href="#">Home</Link>
+            <Link href="/">Home</Link>
           </li>
           <li className="hover:underline">
-            <Link href="#">Levels</Link>
+            <Link href="/levels">Levels</Link>
           </li>
           <li className="hover:underline">
             <Link href="#">Progress</Link>
