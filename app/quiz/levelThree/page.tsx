@@ -4,6 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 
 import questions from "../../../app/data/level3.json";
+import DotGrid from "@/components/Dots/Dots";
 
 const MonacoEditor = dynamic(
   () => import("../../../components/Monaco/MonacoEditor"),
@@ -74,6 +75,28 @@ export default function Level3Page() {
 
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: -1, // фон будет под контентом
+        }}
+      >
+        <DotGrid
+          dotSize={10}
+          gap={15}
+          baseColor="#5227FF"
+          activeColor="#5227FF"
+          proximity={120}
+          shockRadius={250}
+          shockStrength={5}
+          resistance={750}
+          returnDuration={1.5}
+        />
+      </div>
       {toast && (
         <div
           className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
@@ -87,6 +110,7 @@ export default function Level3Page() {
           {toast}
         </div>
       )}
+
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
           <h1 className="text-2xl font-bold mb-4 text-left">Level 3: Code</h1>
