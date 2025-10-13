@@ -13,7 +13,7 @@ const MonacoEditor = dynamic(
 export default function MonacoWrapper() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [code, setCode] = useState("");
-  const [status, setStatus] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
 
@@ -21,15 +21,20 @@ export default function MonacoWrapper() {
     const nextIndex = (currentIndex + 1) % questions.length;
     setCurrentIndex(nextIndex);
     setCode("");
-    setStatus(null);
+    setToast(null);
     setAttempts(3);
+  };
+
+  const showToast = (message: string, duration = 2000) => {
+    setToast(message);
+    setTimeout(() => setToast(null), duration);
   };
 
   const handleValidate = async () => {
     if (loading) return;
 
     setLoading(true);
-    setStatus(null);
+    setToast(null);
 
     try {
       const res = await fetch("/api/validate", {
@@ -42,10 +47,10 @@ export default function MonacoWrapper() {
       });
 
       const data = await res.json();
-      setStatus(data.message);
 
       if (data.message.startsWith("✅")) {
-        setTimeout(() => handleNext(), 1200);
+        showToast("✅ Correct! Moving to next question...");
+        setTimeout(() => handleNext(), 1500);
         return;
       }
 
@@ -54,21 +59,34 @@ export default function MonacoWrapper() {
         setAttempts(remaining);
 
         if (remaining > 0) {
-          setStatus(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
+          showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
         } else {
-          setStatus("❌ No attempts left. Moving to next question...");
-          setTimeout(() => handleNext(), 2000);
+          showToast("❌ No attempts left. Moving to next question...");
+          setTimeout(() => handleNext(), 2500);
         }
       }
     } catch (err) {
-      setStatus("❌ Server connection error");
+      showToast("❌ Server connection error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
+    <main className="relative min-h-screen flex items-center justify-center p-4">
+      {toast && (
+        <div
+          className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
+            toast.startsWith("✅")
+              ? "bg-green-600"
+              : toast.startsWith("⚠️")
+                ? "bg-yellow-600"
+                : "bg-red-600"
+          }`}
+        >
+          {toast}
+        </div>
+      )}
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
           <h1 className="text-2xl font-bold mb-4 text-left">Level 3: Code</h1>
@@ -87,20 +105,6 @@ export default function MonacoWrapper() {
         >
           {loading ? "Checking..." : "Check Solution"}
         </button>
-
-        {status && (
-          <div
-            className={`p-3 rounded-lg w-full text-center ${
-              status.startsWith("✅")
-                ? "bg-green-800 text-green-100"
-                : status.startsWith("⚠️")
-                  ? "bg-yellow-800 text-yellow-100"
-                  : "bg-red-800 text-red-100"
-            }`}
-          >
-            {status}
-          </div>
-        )}
       </div>
     </main>
   );
