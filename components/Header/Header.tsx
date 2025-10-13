@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="bg-[#000017] px-35 text-[#079CDE] flex justify-between items-center">
+    <header className="bg-[#000017] px-35 flex justify-between items-center border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE] text-[#079CDE] text-lg font-semibold">
       <Image src="/logo.png" alt="logo of the website" width="80" height="80" />
       <nav>
         <ul className="flex gap-[30px] text-2xl font-semibold">

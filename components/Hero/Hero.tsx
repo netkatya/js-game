@@ -36,12 +36,30 @@ export default function Hero() {
   };
 
   return (
-    <div className="bg-[url('/img/bg.jpg')] bg-cover bg-center p-[37] h-[960]">
+    <div>
       <div className="flex items-center justify-center mb-[105px]">
-        {/* <video ... /> */}
+        <video
+          src="/gif/robot.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className=" w-[600px] h-[600px] mt-[40px]"
+        >
+          Ваш браузер не підтримує відео тег.
+        </video>
         <div className="font-semibold text-center w-[561px] h-[446px]">
-          <h1 className="text-[128px] ">A.R.I</h1>
-          <p className="text-[64px]">Artificial Robotic Instructor</p>
+          <p className="text-white text-lg md:text-xl font-mono whitespace-pre-wrap">
+            Hello, human...
+            <br />
+            My name is A.R.I. — Artificial Robotic Instructor.
+            <br />
+            I know JavaScript, but I cannot think like a programmer.
+            <br />
+            Will you teach me?
+          </p>
+          {/* <h1 className="text-[128px] ">A.R.I</h1>
+          <p className="text-[64px]">Artificial Robotic Instructor</p> */}
         </div>
       </div>
       <ul className="flex flex-col items-center gap-[24px] font-semibold text-[40px] text-center">

@@ -10,7 +10,7 @@ const MonacoEditor = dynamic(
   { ssr: false }
 );
 
-export default function MonacoWrapper() {
+export default function Level3Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [code, setCode] = useState("");
   const [toast, setToast] = useState<string | null>(null);
