@@ -1,62 +1,62 @@
 [
-  {
-    "id": 11,
-    "type": "input",
-    "question": "Write the keyword used to declare a constant variable.",
-    "answer": "const"
-  },
-  {
-    "id": 12,
-    "type": "input",
-    "question": "What method is used to convert a JSON string into a JavaScript object?",
-    "answer": "JSON.parse"
-  },
-  {
-    "id": 13,
-    "type": "input",
-    "question": "What keyword is used to declare a block-scoped variable?",
-    "answer": " "
-  },
-  {
-    "id": 14,
-    "type": "input",
-    "question": "What value does a function return if it doesn’t explicitly return anything?",
-    "answer": "undefined"
-  },
-  {
-    "id": 15,
-    "type": "input",
-    "question": "Which operator is used to check both value and type equality?",
-    "answer": "==="
-  },
-  {
-    "id": 16,
-    "type": "input",
-    "question": "What will this code output?\n\nconsole.log(typeof NaN === 'number');",
-    "answer": "true"
-  },
-  {
-    "id": 17,
-    "type": "input",
-    "question": "What method converts a JavaScript object into a JSON string?",
-    "answer": "JSON.stringify"
-  },
-  {
-    "id": 18,
-    "type": "input",
-    "question": "What keyword is used to handle errors in a try block?",
-    "answer": "catch"
-  },
-  {
-    "id": 19,
-    "type": "input",
-    "question": "What keyword is used to define an asynchronous function?",
-    "answer": "async"
-  },
-  {
-    "id": 20,
-    "type": "input",
-    "question": "What function is used to schedule code execution after a delay?",
-    "answer": "setTimeout"
-  }
+    {
+        "id": 11,
+        "type": "input",
+        "question": "Write the keyword used to declare a constant variable.",
+        "answer": "const"
+    },
+    {
+        "id": 12,
+        "type": "input",
+        "question": "What method is used to convert a JSON string into a JavaScript object?",
+        "answer": "JSON.parse"
+    },
+    {
+        "id": 13,
+        "type": "input",
+        "question": "What keyword is used to declare a block-scoped variable?",
+        "answer": "let"
+    },
+    {
+        "id": 14,
+        "type": "input",
+        "question": "What value does a function return if it doesn’t explicitly return anything?",
+        "answer": "undefined"
+    },
+    {
+        "id": 15,
+        "type": "input",
+        "question": "Which operator is used to check both value and type equality?",
+        "answer": "==="
+    },
+    {
+        "id": 16,
+        "type": "input",
+        "question": "What will this code output?\n\nconsole.log(typeof NaN === 'number');",
+        "answer": "true"
+    },
+    {
+        "id": 17,
+        "type": "input",
+        "question": "What method converts a JavaScript object into a JSON string?",
+        "answer": "JSON.stringify"
+    },
+    {
+        "id": 18,
+        "type": "input",
+        "question": "What keyword is used to handle errors in a try block?",
+        "answer": "catch"
+    },
+    {
+        "id": 19,
+        "type": "input",
+        "question": "What keyword is used to define an asynchronous function?",
+        "answer": "async"
+    },
+    {
+        "id": 20,
+        "type": "input",
+        "question": "What function is used to schedule code execution after a delay?",
+        "answer": "setTimeout"
+    }
 ]

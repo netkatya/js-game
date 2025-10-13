@@ -2,7 +2,7 @@
 import level2Data from "@/app/data/level2.json";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { InputTask } from "../../../types/quiz";
+import { InputTask } from "@/types/quiz";
 export default function LevelTwo() {
   const router = useRouter();
   const questions: InputTask[] = level2Data;

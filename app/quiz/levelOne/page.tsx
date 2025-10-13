@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { QuizTask } from "../../../types/quiz"; // Переконайтесь, що шлях правильний
-import level1Data from "@/app/data/level1.json"; // Переконайтесь, що шлях правильний
+import { QuizTask } from "@/types/quiz";
+import level1Data from "@/app/data/level1.json";
 
 export default function Level1Page() {
   const router = useRouter();
@@ -12,10 +12,9 @@ export default function Level1Page() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
-  const [currentScore, setCurrentScore] = useState<number>(0);
+  // const [currentScore, setCurrentScore] = useState<number>(0);
   const [currentQuestion, setCurrentQuestion] = useState<number>(1);
 
-  // Завантаження прогресу
   useEffect(() => {
     const rawProgress = localStorage.getItem("quizProgress");
     if (rawProgress) {
@@ -27,7 +26,6 @@ export default function Level1Page() {
     }
   }, []);
 
-  // Збереження прогресу
   const saveProgress = (questionIndex: number) => {
     const rawProgress = localStorage.getItem("quizProgress") || "{}";
     const progressData = JSON.parse(rawProgress);
