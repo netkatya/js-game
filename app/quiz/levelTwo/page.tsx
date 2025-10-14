@@ -3,14 +3,14 @@ import level2Data from "@/app/data/level2.json";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { InputTask } from "@/types/quiz";
+import LevelComplete from "@/components/LevelComplete/LevelComplete";
+
 export default function LevelTwo() {
   const router = useRouter();
   const questions: InputTask[] = level2Data;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [userInput, setUserInput] = useState<string>("");
   const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
-
-  // Новий стан для відстеження статусу відповіді
   const [validationStatus, setValidationStatus] = useState<
     "idle" | "correct" | "incorrect"
   >("idle");
@@ -38,9 +38,7 @@ export default function LevelTwo() {
 
   const question = questions[currentQuestionIndex];
 
-  // Функція перевірки відповіді
   const handleCheckAnswer = () => {
-    // .trim() видаляє зайві пробіли, .toLowerCase() робить перевірку нечутливою до регістру
     if (userInput.trim().toLowerCase() === question.answer.toLowerCase()) {
       setValidationStatus("correct");
     } else {
@@ -48,37 +46,43 @@ export default function LevelTwo() {
     }
   };
 
-  // Функція для переходу до наступного питання
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
       saveProgress(nextIndex);
-      // Скидаємо все для наступного питання
       setUserInput("");
       setValidationStatus("idle");
     } else {
       setIsLevelComplete(true);
+      const rawProgress = localStorage.getItem("quizProgress");
+      if (rawProgress) {
+        const progressData = JSON.parse(rawProgress);
+        progressData.lastActiveLevel = "levelThree";
+        progressData.progress.levelThree = 0;
+        localStorage.setItem("quizProgress", JSON.stringify(progressData));
+      }
     }
   };
 
-  // Функція для повторної спроби
-  const handleTryAgain = () => {
-    setUserInput("");
-    setValidationStatus("idle");
-  };
-
+  // --- ЗМІНА ТУТ ---
+  // Тепер функція handleChange також скидає статус помилки,
+  // як тільки користувач починає вводити новий текст.
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
+    // Якщо статус був "неправильний", повертаємо його в "очікування"
+    if (validationStatus === "incorrect") {
+      setValidationStatus("idle");
+    }
   };
 
-  // Динамічні класи для інпуту
   const getInputClasses = () => {
     const baseClasses =
       "w-full p-3 bg-slate-700 text-white rounded-lg border-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors";
     if (validationStatus === "correct") {
       return `${baseClasses} border-green-500`;
     }
+    // Стиль для червоної рамки залишається, але тепер він зникає при введенні нового тексту
     if (validationStatus === "incorrect") {
       return `${baseClasses} border-red-500`;
     }
@@ -86,21 +90,7 @@ export default function LevelTwo() {
   };
 
   if (isLevelComplete) {
-    return (
-      <main className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center bg-slate-800 p-8 rounded-lg shadow-lg">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Level 2 Complete!
-          </h1>
-          <button
-            onClick={() => router.push("/quiz/levelThree")} // Змініть на правильний шлях
-            className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg text-xl"
-          >
-            Go to the next Level
-          </button>
-        </div>
-      </main>
-    );
+    return <LevelComplete level="2" route="levelThree" />;
   }
 
   return (
@@ -115,26 +105,29 @@ export default function LevelTwo() {
             <input
               value={userInput}
               onChange={handleChange}
-              disabled={validationStatus === "correct"} // Блокуємо поле після правильної відповіді
+              disabled={validationStatus === "correct"}
               id="userInput"
               type="text"
               name="userInput"
-              className={getInputClasses()} // Застосовуємо динамічні стилі
+              className={getInputClasses()}
             />
           </div>
           <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">
             {currentQuestionIndex + 1}/{level2Data.length}
           </div>
 
-          {/* Умовний рендеринг кнопок */}
           <div className="mt-8 text-center">
-            {validationStatus === "idle" && (
+            {(validationStatus === "idle" ||
+              validationStatus === "incorrect") && (
               <button
                 onClick={handleCheckAnswer}
-                disabled={!userInput} // Кнопка неактивна, поки поле порожнє
-                className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl disabled:opacity-50"
+                disabled={!userInput}
+                className={`  font-bold py-3 px-6 rounded-lg text-xl disabled:opacity-50 ${
+                  !userInput ? "cursor-not-allowed" : ""
+                } ${validationStatus === "incorrect" ? "bg-red-500 hover:bg-red-600" : "bg-cyan-500 hover:bg-cyan-600"}
+                `}
               >
-                Check
+                {validationStatus === "incorrect" ? "Try again" : "Check"}
               </button>
             )}
             {validationStatus === "correct" && (
@@ -143,14 +136,6 @@ export default function LevelTwo() {
                 className="bg-green-500 hover:bg-green-600 font-bold py-3 px-6 rounded-lg text-xl"
               >
                 Next question
-              </button>
-            )}
-            {validationStatus === "incorrect" && (
-              <button
-                onClick={handleTryAgain}
-                className="bg-red-500 hover:bg-red-600 font-bold py-3 px-6 rounded-lg text-xl"
-              >
-                Try Again
               </button>
             )}
           </div>

@@ -1,14 +1,11 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { QuizTask } from "@/types/quiz";
 import level1Data from "@/app/data/level1.json";
+import LevelComplete from "@/components/LevelComplete/LevelComplete";
 
 export default function Level1Page() {
-  const router = useRouter();
   const questions: QuizTask[] = level1Data;
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
@@ -21,7 +18,7 @@ export default function Level1Page() {
       const progressData = JSON.parse(rawProgress);
       if (progressData.progress && progressData.progress["levelOne"]) {
         setCurrentQuestionIndex(progressData.progress["levelOne"]);
-        setCurrentQuestion(progressData.progress["levelOne"]);
+        setCurrentQuestion(progressData.progress["levelOne"] + 1);
       }
     }
   }, []);
@@ -54,8 +51,14 @@ export default function Level1Page() {
       saveProgress(nextIndex);
       setSelectedAnswer(null); // Скидаємо відповідь для наступного питання
     } else {
-      // Якщо це було останнє питання, показуємо екран завершення
       setIsLevelComplete(true);
+      const rawProgress = localStorage.getItem("quizProgress");
+      if (rawProgress) {
+        const progressData = JSON.parse(rawProgress);
+        progressData.lastActiveLevel = "levelTwo";
+        progressData.progress.levelTwo = 0;
+        localStorage.setItem("quizProgress", JSON.stringify(progressData));
+      }
     }
   };
 
@@ -84,21 +87,7 @@ export default function Level1Page() {
 
   // Якщо рівень завершено, показуємо спеціальний екран
   if (isLevelComplete) {
-    return (
-      <main className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center bg-slate-800 p-8 rounded-lg shadow-lg">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Level 1 Complete!
-          </h1>
-          <button
-            onClick={() => router.push("/quiz/levelTwo")} // Змініть на правильний шлях
-            className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg text-xl"
-          >
-            Go to the next Level
-          </button>
-        </div>
-      </main>
-    );
+    return <LevelComplete level="1" route="levelTwo" />;
   }
 
   return (
@@ -130,16 +119,20 @@ export default function Level1Page() {
             {currentQuestion}/{level1Data.length}
           </div>
           {/* Кнопка "Далі" з'являється тільки після вибору відповіді */}
-          {selectedAnswer && (
-            <div className="mt-8 text-center">
-              <button
-                onClick={handleNextQuestion}
-                className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
-              >
-                Next question
-              </button>
-            </div>
-          )}
+
+          <div className="mt-8 text-center">
+            <button
+              onClick={handleNextQuestion}
+              className={`font-bold py-3 px-6 rounded-lg text-xl ${
+                !selectedAnswer
+                  ? "bg-cyan-700 cursor-not-allowed"
+                  : "bg-cyan-500 hover:bg-cyan-600"
+              }`}
+              disabled={!selectedAnswer}
+            >
+              {selectedAnswer ? "Next question" : "Waiting..."}
+            </button>
+          </div>
         </div>
       </div>
     </main>
