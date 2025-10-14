@@ -86,7 +86,7 @@ export default function Level3Page() {
         }}
       >
         <DotGrid
-          dotSize={10}
+          dotSize={9}
           gap={15}
           baseColor="#02AFE8"
           activeColor="#5227FF"
