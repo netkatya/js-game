@@ -9,55 +9,64 @@
     {
         "id": 32,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns a string made of the first 3 characters of another string.",
+        "default": "function firstNChars(str) {\n\n}",
+        "solution": "function firstNChars(str) {\nreturn str.slice(0, 3);\n}"
     },
     {
         "id": 33,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that checks if a number is even.",
+        "default": "function isEven(num) {\n\n}",
+        "solution": "function isEven(num) {\nreturn num % 2 === 0;\n}"
     },
     {
         "id": 34,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns the minimum number in an array.",
+        "default": "function minInArray(arr) {\n\n}",
+        "solution": "function minInArray(arr) {\nreturn Math.min(...arr);\n}"
     },
     {
         "id": 35,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns a string in uppercase.",
+        "default": "function toUpperCase(str) {\n\n}",
+        "solution": "function toUpperCase(str) {\nreturn str.toUpperCase();\n}"
     },
     {
         "id": 36,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns the length of an array.",
+        "default": "function arrayLength(arr) {\n\n}",
+        "solution": "function arrayLength(arr) {\nreturn arr.length;\n}"
     },
     {
         "id": 37,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns true if a number is exactly 10.",
+        "default": "function isTen(num) {\n\n}",
+        "solution": "function isTen(num) {\nreturn num === 10;\n}"
     },
     {
         "id": 38,
         "type": "function",
-        "question": "",
-        "solution": ""
+         "question": "Write a function that returns true if a string starts with 'JS'.",
+        "default": "function startsWithJS(str) {\n\n}",
+        "solution": "function startsWithJS(str) {\nreturn str.startsWith('JS');\n}"
     },
     {
         "id": 39,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns the last 2 characters of a string.",
+        "default": "function lastTwoChars(str) {\n\n}",
+        "solution": "function lastTwoChars(str) {\nreturn str.slice(-2);\n}"
     },
     {
         "id": 40,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns true if a number is divisible by both 2 and 3.",
+        "default": "function divisibleByTwoAndThree(num) {\n\n}",
+        "solution": "function divisibleByTwoAndThree(num) { return num % 2 === 0 && num % 3 === 0; }"
     }
 ]

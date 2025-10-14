@@ -17,8 +17,10 @@ export default function Level3Page() {
   const [toast, setToast] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
+  const [isSwitching, setIsSwitching] = useState(false);
 
   const handleNext = () => {
+    setIsSwitching(false);
     const nextIndex = (currentIndex + 1) % questions.length;
     setCurrentIndex(nextIndex);
     setCode("");
@@ -49,6 +51,7 @@ export default function Level3Page() {
       const data = await res.json();
 
       if (data.message.startsWith("✅")) {
+        setIsSwitching(true);
         showToast("✅ Correct! Moving to next question...");
         setTimeout(() => handleNext(), 1500);
         return;
@@ -61,6 +64,7 @@ export default function Level3Page() {
         if (remaining > 0) {
           showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
         } else {
+          setIsSwitching(true);
           showToast("❌ No attempts left. Moving to next question...");
           setCode(questions[currentIndex].solution);
           setTimeout(() => handleNext(), 2500);
@@ -82,7 +86,7 @@ export default function Level3Page() {
           left: 0,
           width: "100%",
           height: "100%",
-          zIndex: -1, // фон будет под контентом
+          zIndex: -1,
         }}
       >
         <DotGrid
@@ -124,7 +128,7 @@ export default function Level3Page() {
         </div>
         <button
           onClick={handleValidate}
-          disabled={loading}
+          disabled={loading || isSwitching}
           className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
         >
           {loading ? "Checking..." : "Check Solution"}
