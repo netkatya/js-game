@@ -2,8 +2,9 @@
     {
         "id": 31,
         "type": "function",
-        "question": "",
-        "solution": ""
+        "question": "Write a function that returns the largest of three numbers.",
+        "default": "function maxOfThree(a, b, c) {\n\n}",
+        "solution": "function maxOfThree(a, b, c) {\nreturn Math.max(a, b, c);\n}"
     },
     {
         "id": 32,

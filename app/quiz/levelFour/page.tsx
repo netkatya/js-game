@@ -13,7 +13,7 @@ const MonacoEditor = dynamic(
 
 export default function Level4Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(questions[currentIndex].default);
   const [toast, setToast] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
@@ -21,7 +21,7 @@ export default function Level4Page() {
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % questions.length;
     setCurrentIndex(nextIndex);
-    setCode("");
+    setCode(questions[currentIndex].default);
     setToast(null);
     setAttempts(3);
   };
