@@ -39,7 +39,7 @@ export default function Hero() {
   return (
     <div>
       <div className="flex items-center justify-center gap-[40px] mb-[105px] mt-[60px]">
-        <div className="relative w-[500px] h-[500px] overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
+        <div className="relative w-1/3 aspect-square overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
           <video
             src="/gif/robot.mp4"
             autoPlay
@@ -65,27 +65,29 @@ export default function Hero() {
               className="text-3xl text-white whitespace-pre-wrap font-semibold"
             />
           </div>
-          <ul className="flex flex-col items-center gap-[24px] font-semibold text-[40px] text-center mt-[40px]">
-            <li className="border-3 p-[12px] border-solid border-[#079cde] w-[543px] transition hover:translate-y-[-5px] rounded-md">
-              <button onClick={startNewGameClick}>
-                {/* Посилання на перший рівень для початку нової гри */}
-                <Link href="quiz/levelOne">Start training</Link>
-              </button>
+          <ul className="flex flex-col items-center gap-6 font-semibold text-[40px] text-center mt-10">
+            <li className="w-[543px]">
+              <Link
+                href="quiz/levelOne"
+                onClick={startNewGameClick}
+                className="block w-full p-3 text-center border-3 border-solid border-[#079cde] rounded-md 
+                 transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
+              >
+                Start training
+              </Link>
             </li>
+
             <li
-              className={`border-3 p-[12px] border-solid border-[#079cde] w-[543px] transition hover:translate-y-[-5px] rounded-md ${
-                !progress ? "opacity-50 pointer-events-none" : ""
-              }`}
+              className={`w-[543px] ${!progress ? "opacity-50 pointer-events-none" : ""}`}
             >
-              <button disabled={!progress}>
-                {/* --- ЗМІНА ТУТ --- */}
-                {/* Тепер href береться зі стану continueLink */}
-                <Link href={continueLink}>Continue</Link>
-              </button>
+              <Link
+                href={continueLink}
+                className="block w-full p-3 text-center border-3 border-solid border-[#079cde] rounded-md 
+                 transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
+              >
+                Continue
+              </Link>
             </li>
-            {/* <li className="border-3 p-[12px] border-solid border-[#079cde] w-[543px] transition hover:translate-y-[-5px] ">
-          <Link href="#">Settings</Link>
-        </li> */}
           </ul>
         </div>
       </div>
