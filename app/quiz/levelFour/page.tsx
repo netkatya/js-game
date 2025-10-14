@@ -3,7 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 
-import questions from "../../../app/data/level3.json";
+import questions from "../../data/level4.json";
 import DotGrid from "@/components/Dots/Dots";
 
 const MonacoEditor = dynamic(
@@ -11,7 +11,7 @@ const MonacoEditor = dynamic(
   { ssr: false }
 );
 
-export default function Level3Page() {
+export default function Level4Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [code, setCode] = useState("");
   const [toast, setToast] = useState<string | null>(null);
@@ -114,7 +114,9 @@ export default function Level3Page() {
 
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
-          <h1 className="text-2xl font-bold mb-4 text-left">Level 3: Code</h1>
+          <h1 className="text-2xl font-bold mb-4 text-left">
+            Level 4: Functions
+          </h1>
           <strong>Task:</strong> {questions[currentIndex].question}
           <div className="w-full mt-4">
             <MonacoEditor value={code} onChange={setCode} />
