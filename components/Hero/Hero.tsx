@@ -66,14 +66,14 @@ export default function Hero() {
             />
           </div>
           <ul className="flex flex-col items-center gap-[24px] font-semibold text-[40px] text-center mt-[40px]">
-            <li className="border-3 p-[12px] border-solid border-[#079cde] w-[543px] transition hover:translate-y-[-5px]">
+            <li className="border-3 p-[12px] border-solid border-[#079cde] w-[543px] transition hover:translate-y-[-5px] rounded-md">
               <button onClick={startNewGameClick}>
                 {/* Посилання на перший рівень для початку нової гри */}
                 <Link href="quiz/levelOne">Start training</Link>
               </button>
             </li>
             <li
-              className={`border-3 p-[12px] border-solid border-[#079cde] w-[543px] transition hover:translate-y-[-5px] ${
+              className={`border-3 p-[12px] border-solid border-[#079cde] w-[543px] transition hover:translate-y-[-5px] rounded-md ${
                 !progress ? "opacity-50 pointer-events-none" : ""
               }`}
             >
