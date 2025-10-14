@@ -11,14 +11,14 @@ export default function Header() {
             <Link href="/">Home</Link>
           </li>
           <li className="hover:underline">
-            <Link href="/levels">Levels</Link>
-          </li>
-          <li className="hover:underline">
-            <Link href="#">Progress</Link>
-          </li>
-          <li className="hover:underline">
             <Link href="#">About A.R.I</Link>
           </li>
+          <li className="hover:underline">
+            <Link href="/levels">Levels</Link>
+          </li>
+          {/* <li className="hover:underline">
+            <Link href="#">Progress</Link>
+          </li> */}
         </ul>
       </nav>
     </header>
