@@ -33,7 +33,6 @@ export default function Level3Page() {
 
   const handleValidate = async () => {
     if (loading) return;
-
     setLoading(true);
     setToast(null);
 

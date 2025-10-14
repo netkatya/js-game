@@ -48,7 +48,7 @@ export default function Hero() {
             playsInline
             className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover object-center"
           >
-            Ваш браузер не підтримує відео тег.
+            Can &apos;t open with your browser
           </video>
         </div>
 

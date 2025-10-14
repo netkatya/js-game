@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const availableLevels = [
-  { id: 1, name: "JavaScript Basics" },
+  { id: 1, name: "Tests", route: "levelOne" },
   { id: 2, name: "React Fundamentals" },
   { id: 3, name: "React Fundamentals" },
   { id: 4, name: "React Fundamentals" },
@@ -20,7 +20,7 @@ export default function Levels() {
               className="flex justify-center w-[567px] h-[126px] border-3 p-[12px] border-solid border-[#079cde] transition hover:translate-y-[-5px]"
             >
               <Link
-                href={`/quiz/${level.id}`}
+                href={`/quiz/${level.route}`}
                 className="text-[64px] font-semibold"
               >
                 {" "}
