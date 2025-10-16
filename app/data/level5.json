@@ -2,61 +2,70 @@
     {
         "id": 41,
         "type": "debug",
-        "brokenCode": "",
-        "check": ""
+        "question": "Fix the function to return the sum of even numbers in an array. (2 errors)",
+        "default": "function sumEvenNumbers(arr) {\n  return arr.filter(x => x % 2 = 0).reduce((a,b) => a + b);\n}",
+        "solution": "function sumEvenNumbers(arr) {\n  return arr.filter(x => x % 2 === 0).reduce((a,b) => a + b, 0);\n}"
     },
     {
         "id": 42,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to return the first string in uppercase if it starts with 'a'. (3 errors)",
+        "default": "function firstAUpper(arr) {\n  for (let str in arr) {\n    if (str[0] = 'a') {\n      return str.toUpperCase;\n    }\n  }\n  return null;\n}",
+        "solution": "function firstAUpper(arr) {\n  for (let str of arr) {\n    if (str[0] === 'a') {\n      return str.toUpperCase();\n    }\n  }\n  return null;\n}"
     },
     {
         "id": 43,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to return 'even' if number is even, 'odd' if odd. (2 errors)",
+        "default": "function evenOrOdd(n) {\n  if (n % 2 = 0) return 'even',\n  else return 'odd';\n}",
+        "solution": "function evenOrOdd(n) {\n  if (n % 2 === 0) return 'even';\n  else return 'odd';\n}"
     },
     {
         "id": 44,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to count strings with length > 3. (2 errors)",
+        "default": "function countLong(arr) {\n  let count = 0;\n  for (let str of arr) {\n    if str.length > 3 count =+ 1;\n  }\n  return count;\n}",
+        "solution": "function countLong(arr) {\n  let count = 0;\n  for (let str of arr) {\n    if (str.length > 3) count += 1;\n  }\n  return count;\n}"
     },
     {
         "id": 45,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to return 'yes' if a number is positive, 'no' if negative, 'zero' otherwise. (2 errors)",
+        "default": "function checkNumber(n) {\n  if n > 0 return 'yes';\n  else if n < 0 return 'no';\n  else return 'zero';\n}",
+        "solution": "function checkNumber(n) {\n  if (n > 0) return 'yes';\n  else if (n < 0) return 'no';\n  else return 'zero';\n}"
     },
     {
         "id": 46,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to store an array in localStorage. (1 errors)",
+        "default": "function saveArray(key, arr) {\n  localStorage.setItem(key, JSON.parse(arr));\n}",
+        "solution": "function saveArray(key, arr) {\n  localStorage.setItem(key, JSON.stringify(arr));\n}"
     },
     {
         "id": 47,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to multiply all numbers in an array by 3. (1 error)",
+        "default": "function tripleArray(arr) {\n  arr.map(x => x * 3);\n}",
+        "solution": "function tripleArray(arr) {\n  return arr.map(x => x * 3);\n}"
     },
     {
         "id": 48,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to return the total age of all people in the object. (1 errors)",
+  "default": "function totalAge(people) {\n  let sum = 0;\n  for (let person in people) {\n    sum += people.person.age;\n  }\n  return sum;\n}",
+  "solution": "function totalAge(people) {\n  let sum = 0;\n  for (let person in people) {\n    sum += people[person].age;\n  }\n  return sum;\n}"
     },
     {
         "id": 49,
-        "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the code to select a button and log 'Clicked!' on click. (2 errors)",
+        "default": "const btn = document.querySelectorById('#myButton');\nbtn.addEventListener('submit', () => {\n  console.log('Clicked!');\n});",
+        "solution": "const btn = document.querySelector('#myButton');\nbtn.addEventListener('click', () => {\n  console.log('Clicked!');\n});"
     },
     {
         "id": 50,
         "type": "debug",
-        "brokenCode": "",
-        "fixedCode": ""
+        "question": "Fix the function to fetch data from an API endpoint using GET. (3 errors)",
+        "default": "async function fetchData(url) {\n  let res = fetch(url, { method: 'get' });\n  return res.json;\n}",
+        "solution": "async function fetchData(url) {\n  let res = await fetch(url, { method: 'GET' });\n  return res.json();\n}"
     }
 ]
