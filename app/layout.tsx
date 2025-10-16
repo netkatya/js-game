@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Rajdhani } from "next/font/google";
+import { DM_Sans, Rajdhani } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],

@@ -52,7 +52,7 @@ export default function LevelComplete({ level, route }: LevelCompleteProps) {
             Level {level} Complete!
           </h1>
           <button
-            onClick={() => router.push(`/quiz/${route}`)} // Змініть на правильний шлях
+            onClick={() => router.push(`/quiz/${route}`)}
             className="w-[420px] min-h-[80px] p-3 text-center border-3 border-solid border-[#079cde] rounded-md 
                  transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE] text-2xl font-semibold"
           >

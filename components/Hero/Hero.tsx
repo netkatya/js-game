@@ -38,7 +38,7 @@ export default function Hero() {
 
   return (
     <div>
-      <div className="flex items-center justify-center gap-[40px] mb-[105px] mt-[60px]">
+      <div className="flex items-center justify-center gap-[40px] pb-[60px] pt-[40px]">
         <div className="relative w-1/3 aspect-square overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
           <video
             src="/gif/robot.mp4"
