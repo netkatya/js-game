@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { QuizTask } from "@/types/quiz";
 import level1Data from "@/app/data/level1.json";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
+import DotGrid from "@/components/Dots/Dots";
 
 export default function Level1Page() {
   const questions: QuizTask[] = level1Data;
@@ -127,6 +128,28 @@ export default function Level1Page() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: -1,
+        }}
+      >
+        <DotGrid
+          dotSize={9}
+          gap={15}
+          baseColor="#120953"
+          activeColor="#1481F5"
+          proximity={120}
+          shockRadius={250}
+          shockStrength={5}
+          resistance={750}
+          returnDuration={1.5}
+        />
+      </div>
       <div className="w-full max-w-2xl text-white">
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">

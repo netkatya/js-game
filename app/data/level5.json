@@ -52,8 +52,8 @@
         "id": 48,
         "type": "debug",
         "question": "Fix the function to return the total age of all people in the object. (1 errors)",
-  "default": "function totalAge(people) {\n  let sum = 0;\n  for (let person in people) {\n    sum += people.person.age;\n  }\n  return sum;\n}",
-  "solution": "function totalAge(people) {\n  let sum = 0;\n  for (let person in people) {\n    sum += people[person].age;\n  }\n  return sum;\n}"
+        "default": "function totalAge(people) {\n  let sum = 0;\n  for (let person in people) {\n    sum += people.person.age;\n  }\n  return sum;\n}",
+        "solution": "function totalAge(people) {\n  let sum = 0;\n  for (let person in people) {\n    sum += people[person].age;\n  }\n  return sum;\n}"
     },
     {
         "id": 49,
