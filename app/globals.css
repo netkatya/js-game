@@ -3,16 +3,22 @@
 :root {
   --background: #0d0f14;
   --foreground: #e0e0e0;
+  /* --font-family: var(--font-family);
+  --third-family: var(--third-family); */
 }
 
 body {
+  font-family: var(--font-family), sans-serif;
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-family);
   background-color: #000017;
   /* background-image: url("/img/bg.jpg"); */
   background-position: center;
   background-size: cover;
+}
+
+.third-font {
+  font-family: var(--third-family);
 }
 
 button {

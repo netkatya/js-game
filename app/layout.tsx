@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Rajdhani } from "next/font/google";
+import { Kelly_Slab, Rajdhani } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
@@ -8,6 +8,12 @@ const rajdhani = Rajdhani({
   subsets: ["latin"],
   variable: "--font-family",
   weight: ["300", "400", "500", "600", "700"],
+});
+
+const kellySlab = Kelly_Slab({
+  subsets: ["latin"],
+  variable: "--third-family",
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -47,7 +53,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${rajdhani.variable} antialiased`}>
+      <body
+        className={`${rajdhani.variable} ${kellySlab.variable} antialiased`}
+      >
         {" "}
         <Header></Header>
         {children}
