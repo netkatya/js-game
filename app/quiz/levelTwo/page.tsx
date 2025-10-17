@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { InputTask } from "@/types/quiz";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import DotGrid from "@/components/Dots/Dots";
+import { saveProgress } from "@/const/save";
 
 export default function LevelTwo() {
   const questions: InputTask[] = level2Data;
@@ -16,6 +17,7 @@ export default function LevelTwo() {
   const [attemptsLeft, setAttemptsLeft] = useState<number>(2);
   const [rightAnswers, setRightAnswers] = useState<number>(0);
   const [wrongAnswers, setWrongAnswers] = useState<number>(0);
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     const rawProgress = localStorage.getItem("quizProgress");
@@ -23,37 +25,21 @@ export default function LevelTwo() {
       const progressData = JSON.parse(rawProgress);
       if (progressData.progress && progressData.progress["levelTwo"]) {
         const levelProgress = progressData.progress["levelTwo"];
-        setCurrentQuestionIndex(levelProgress.question || 0);
+        setCurrentQuestionIndex(levelProgress.question + 1 || 0);
         setRightAnswers(levelProgress.rightAnswers || 0);
         setWrongAnswers(levelProgress.wrongAnswers || 0);
       }
     }
   }, []);
-
+  const showToast = (message: string, duration = 2000) => {
+    setToast(message);
+    setTimeout(() => setToast(null), duration);
+  };
   useEffect(() => {
     setUserInput("");
     setValidationStatus("idle");
     setAttemptsLeft(2);
   }, [currentQuestionIndex]);
-
-  const saveProgress = (
-    questionIndex: number,
-    finalRight: number,
-    finalWrong: number
-  ) => {
-    const rawProgress = localStorage.getItem("quizProgress") || "{}";
-    const progressData = JSON.parse(rawProgress);
-    if (!progressData.progress) {
-      progressData.progress = {};
-    }
-    progressData.lastActiveLevel = "levelTwo";
-    progressData.progress["levelTwo"] = {
-      question: questionIndex,
-      rightAnswers: finalRight,
-      wrongAnswers: finalWrong,
-    };
-    localStorage.setItem("quizProgress", JSON.stringify(progressData));
-  };
 
   const question = questions[currentQuestionIndex];
 
@@ -63,17 +49,30 @@ export default function LevelTwo() {
       const updatedRightAnswers = rightAnswers + 1;
       setRightAnswers(updatedRightAnswers);
       setValidationStatus("correct");
+      showToast("✅ Correct!");
       // Зберігаємо прогрес одразу після правильної відповіді
-      saveProgress(currentQuestionIndex, updatedRightAnswers, wrongAnswers);
+      saveProgress(
+        currentQuestionIndex,
+        updatedRightAnswers,
+        wrongAnswers,
+        "Two"
+      );
     } else {
       const newAttemptsLeft = attemptsLeft - 1;
+      showToast(`❌ Incorrect. You have ${newAttemptsLeft} attempt(s) left.`);
       setAttemptsLeft(newAttemptsLeft);
       setValidationStatus("incorrect");
       if (newAttemptsLeft === 0) {
         const updatedWrongAnswers = wrongAnswers + 1;
         setWrongAnswers(updatedWrongAnswers);
+        showToast("❌ No attempts left. Look at the right answers");
         // Зберігаємо прогрес, коли закінчились спроби
-        saveProgress(currentQuestionIndex, rightAnswers, updatedWrongAnswers);
+        saveProgress(
+          currentQuestionIndex,
+          rightAnswers,
+          updatedWrongAnswers,
+          "Two"
+        );
       }
     }
   };
@@ -83,6 +82,7 @@ export default function LevelTwo() {
     if (currentQuestionIndex < questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
+      setToast(null);
     } else {
       setIsLevelComplete(true);
       const rawProgress = localStorage.getItem("quizProgress") || "{}";
@@ -149,6 +149,19 @@ export default function LevelTwo() {
           returnDuration={1.5}
         />
       </div>
+      {toast && (
+        <div
+          className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
+            toast.startsWith("✅")
+              ? "bg-green-600"
+              : toast.startsWith("⚠️")
+                ? "bg-yellow-600"
+                : "bg-red-600"
+          }`}
+        >
+          {toast}
+        </div>
+      )}
       <div className="w-full max-w-2xl text-white">
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
@@ -170,11 +183,18 @@ export default function LevelTwo() {
               name="userInput"
               className={getInputClasses()}
             />
-            {attemptsLeft === 0 && validationStatus === "incorrect" && (
-              <p className="text-center text-green-400">
-                Correct answer: <strong>{question.answer}</strong>
-              </p>
-            )}
+            <div
+              className="mt-[10px] font-semibold text-xl"
+              style={{ minHeight: "32px" }}
+            >
+              {attemptsLeft === 0 && validationStatus === "incorrect" ? (
+                <p className="text-center text-green-400">
+                  Correct answer: <strong>{question.answer}</strong>
+                </p>
+              ) : (
+                <span>&nbsp;</span>
+              )}
+            </div>
           </div>
           <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">
             {currentQuestionIndex + 1}/{level2Data.length}

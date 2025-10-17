@@ -4,6 +4,7 @@ import { QuizTask } from "@/types/quiz";
 import level1Data from "@/app/data/level1.json";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import DotGrid from "@/components/Dots/Dots";
+import { saveProgress } from "@/const/save";
 
 export default function Level1Page() {
   const questions: QuizTask[] = level1Data;
@@ -13,7 +14,6 @@ export default function Level1Page() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(1);
   const [rightAnswers, setRightAnswers] = useState<number>(0);
   const [wrongAnswers, setWrongAnswers] = useState<number>(0);
-  const [attemptsLeft, setAttemptsLeft] = useState<number>(2);
   const [isAnswered, setIsAnswered] = useState<boolean>(false); // Допоміжний стан, щоб уникнути подвійного підрахунку
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function Level1Page() {
       const progressData = JSON.parse(rawProgress);
       if (progressData.progress && progressData.progress["levelOne"]) {
         const levelOneProgress = progressData.progress["levelOne"];
-        setCurrentQuestionIndex(levelOneProgress.question || 0);
+        setCurrentQuestionIndex(levelOneProgress.question + 1 || 0);
         setCurrentQuestion((levelOneProgress.question || 0) + 1);
         // Завантажуємо збережений рахунок
         setRightAnswers(levelOneProgress.rightAnswers || 0);
@@ -33,58 +33,29 @@ export default function Level1Page() {
 
   useEffect(() => {
     setSelectedAnswer(null);
-    setAttemptsLeft(2);
     setIsAnswered(false); // Скидаємо для нового питання
   }, [currentQuestionIndex]);
 
   // ✅ ВИПРАВЛЕНА ФУНКЦІЯ ЗБЕРЕЖЕННЯ
-  const saveProgress = (
-    questionIndex: number,
-    finalRight: number,
-    finalWrong: number
-  ) => {
-    // 1. Читаємо існуючий прогрес
-    const rawProgress = localStorage.getItem("quizProgress") || "{}";
-    const progressData = JSON.parse(rawProgress);
-    // 2. Створюємо об'єкт progress, якщо його немає
-    if (!progressData.progress) {
-      progressData.progress = {};
-    }
-    // 3. Оновлюємо дані
-    progressData.lastActiveLevel = "levelOne";
-    progressData.progress["levelOne"] = {
-      question: questionIndex,
-      rightAnswers: finalRight,
-      wrongAnswers: finalWrong,
-    };
-    // 4. Зберігаємо весь об'єкт назад
-    localStorage.setItem("quizProgress", JSON.stringify(progressData));
-  };
 
   const question = questions[currentQuestionIndex];
 
   // ✅ ВИПРАВЛЕНА ЛОГІКА ПІДРАХУНКУ
   const handleAnswerClick = (option: string) => {
     if (isAnswered) return; // Блокуємо, якщо на питання вже відповіли
-
     setSelectedAnswer(option);
-
     if (option === question.answer) {
       setRightAnswers((prev) => prev + 1);
       setIsAnswered(true); // Відмічаємо, що питання закрите
     } else {
-      const newAttemptsLeft = attemptsLeft - 1;
-      setAttemptsLeft(newAttemptsLeft);
-      if (newAttemptsLeft === 0) {
-        setWrongAnswers((prev) => prev + 1);
-        setIsAnswered(true); // Відмічаємо, що питання закрите (спроби закінчились)
-      }
+      setWrongAnswers((prev) => prev + 1);
+      setIsAnswered(true); // Відмічаємо, що питання закрите (спроби закінчились)
     }
   };
 
   const handleNextQuestion = () => {
     // Зберігаємо фінальний рахунок перед переходом
-    saveProgress(currentQuestionIndex, rightAnswers, wrongAnswers);
+    saveProgress(currentQuestionIndex, rightAnswers, wrongAnswers, "One");
 
     if (currentQuestionIndex < questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
@@ -113,9 +84,6 @@ export default function Level1Page() {
     if (selectedAnswer) {
       if (isSelectedAnswer) {
         return isCorrectAnswer ? "bg-green-500" : "bg-red-500";
-      }
-      if (attemptsLeft === 0 && isCorrectAnswer) {
-        return "bg-green-500";
       }
       return "bg-slate-700 opacity-50";
     }
@@ -154,9 +122,6 @@ export default function Level1Page() {
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold mb-4">Level 1: Tests</h1>
-            <p className="text-lg font-semibold text-yellow-400 mb-4">
-              Attempts left: {attemptsLeft}
-            </p>
           </div>
           <h3 className="text-xl font-semibold text-center mb-8">
             {question.question}
@@ -174,7 +139,7 @@ export default function Level1Page() {
             ))}
           </div>
           <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">
-            {currentQuestion}/{level1Data.length}
+            {currentQuestion + 1}/{level1Data.length}
           </div>
 
           <div className="mt-8 text-center h-14">

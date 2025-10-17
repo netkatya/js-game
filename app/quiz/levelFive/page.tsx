@@ -1,17 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 import questions from "../../data/level5.json";
 import DotGrid from "@/components/Dots/Dots";
+import { saveProgress } from "@/const/save";
+import { useRouter } from "next/navigation";
 
 const MonacoEditor = dynamic(
   () => import("../../../components/Monaco/MonacoEditor"),
   { ssr: false }
 );
 
-export default function Level4Page() {
+export default function Level5Page() {
+  const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [code, setCode] = useState(questions[currentIndex].default);
   const [toast, setToast] = useState<string | null>(null);
@@ -19,9 +22,38 @@ export default function Level4Page() {
   const [attempts, setAttempts] = useState(3);
   const [isSwitching, setIsSwitching] = useState(false);
 
+  // --- Що було додано (1/4): Стан для балів та завершення ---
+  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
+  const [rightAnswers, setRightAnswers] = useState<number>(0);
+  const [wrongAnswers, setWrongAnswers] = useState<number>(0);
+
+  // --- Що було додано (2/4): Завантаження прогресу ---
+  useEffect(() => {
+    const rawProgress = localStorage.getItem("quizProgress");
+    if (rawProgress) {
+      const progressData = JSON.parse(rawProgress);
+      if (progressData.progress && progressData.progress["levelFive"]) {
+        const levelProgress = progressData.progress["levelFive"];
+        const loadedIndex = levelProgress.question || 0;
+        setCurrentIndex(loadedIndex + 1);
+        setCode(questions[loadedIndex].default);
+        setRightAnswers(levelProgress.rightAnswers || 0);
+        setWrongAnswers(levelProgress.wrongAnswers || 0);
+      }
+    }
+  }, []);
+  useEffect(() => {
+    // Цей код виконається ТІЛЬКИ ТОДІ, коли isLevelComplete зміниться на true
+    if (isLevelComplete) {
+      router.push("/final"); // або будь-який інший маршрут
+    }
+  }, [isLevelComplete, router]); // Dependency array
+
+  // --- Що було додано (3/4): Функція збереження прогресу ---
+
   const handleNext = () => {
     setIsSwitching(false);
-    const nextIndex = (currentIndex + 1) % questions.length;
+    const nextIndex = currentIndex + 1; // Просто переходимо до наступного
     setCurrentIndex(nextIndex);
     setCode(questions[nextIndex].default);
     setToast(null);
@@ -33,11 +65,13 @@ export default function Level4Page() {
     setTimeout(() => setToast(null), duration);
   };
 
+  // --- Що було додано (4/4): Оновлена логіка валідації та завершення ---
   const handleValidate = async () => {
-    if (loading) return;
-
+    if (loading || isSwitching) return;
     setLoading(true);
     setToast(null);
+
+    const isLastQuestion = currentIndex === questions.length - 1;
 
     try {
       const res = await fetch("/api/validate", {
@@ -52,9 +86,18 @@ export default function Level4Page() {
       const data = await res.json();
 
       if (data.message.startsWith("✅")) {
-        setIsSwitching(true);
-        showToast("✅ Correct! Moving to next question...");
-        setTimeout(() => handleNext(), 1500);
+        const updatedRightAnswers = rightAnswers + 1;
+        setRightAnswers(updatedRightAnswers);
+        saveProgress(currentIndex, updatedRightAnswers, wrongAnswers, "Five");
+
+        if (isLastQuestion) {
+          showToast("✅ Excellent! Final level complete!");
+          setTimeout(() => setIsLevelComplete(true), 1500);
+        } else {
+          setIsSwitching(true);
+          showToast("✅ Correct! Moving to next question...");
+          setTimeout(handleNext, 1500);
+        }
         return;
       }
 
@@ -65,10 +108,19 @@ export default function Level4Page() {
         if (remaining > 0) {
           showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
         } else {
-          setIsSwitching(true);
-          showToast("❌ No attempts left. Moving to next question...");
+          const updatedWrongAnswers = wrongAnswers + 1;
+          setWrongAnswers(updatedWrongAnswers);
+          saveProgress(currentIndex, rightAnswers, updatedWrongAnswers, "Five");
           setCode(questions[currentIndex].solution);
-          setTimeout(() => handleNext(), 2500);
+
+          if (isLastQuestion) {
+            showToast("❌ No attempts left. Final level complete.");
+            setTimeout(() => setIsLevelComplete(true), 2500);
+          } else {
+            setIsSwitching(true);
+            showToast("❌ No attempts left. Moving to next question...");
+            setTimeout(handleNext, 2500);
+          }
         }
       }
     } catch (err) {
@@ -78,8 +130,11 @@ export default function Level4Page() {
     }
   };
 
+  // Показуємо екран завершення, якщо рівень пройдено
+
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
+      {/* ... ваша верстка залишається без змін ... */}
       <div
         style={{
           position: "absolute",
@@ -102,6 +157,7 @@ export default function Level4Page() {
           returnDuration={1.5}
         />
       </div>
+
       {toast && (
         <div
           className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
@@ -129,6 +185,7 @@ export default function Level4Page() {
             {currentIndex + 1}/{questions.length}
           </div>
         </div>
+
         <button
           onClick={handleValidate}
           disabled={loading || isSwitching}
