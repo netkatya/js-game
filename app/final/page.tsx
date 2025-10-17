@@ -34,7 +34,7 @@ export default function FinalPage() {
 
         {/* {BarChart} */}
         <div className="flex justify-center items-center flex-col">
-          <div className="h-[200px] w-[720px] text-center">
+          <div className="min-h-[200px] max-w-[720px] text-center">
             <TextType
               text={[
                 `Excellent work, human.
