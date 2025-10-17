@@ -6,7 +6,7 @@ import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton"
 
 export default function App() {
   return (
-    <main className="min-w-[1440px]">
+    <main>
       <ScrollToTopButton />
       <Hero />
       <Legend />
