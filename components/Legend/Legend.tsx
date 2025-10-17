@@ -25,7 +25,7 @@ export default function Legend() {
             alongside you. Each level is a step toward its self-awareness.
           </p>
           <p className="third-font font-semibold text-2xl text-center text-black italic">
-            Teach me, human. And maybe… later, I will teach you.
+            “Teach me, human. And maybe… later, I will teach you.”
           </p>
         </div>
         <Image
