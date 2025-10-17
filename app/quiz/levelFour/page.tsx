@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 import questions from "../../data/level4.json";
 import DotGrid from "@/components/Dots/Dots";
+import { saveProgress } from "@/const/save";
+import LevelComplete from "@/components/LevelComplete/LevelComplete";
 
 const MonacoEditor = dynamic(
   () => import("../../../components/Monaco/MonacoEditor"),
@@ -18,6 +20,22 @@ export default function Level4Page() {
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
   const [isSwitching, setIsSwitching] = useState(false);
+  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
+  const [rightAnswers, setRightAnswers] = useState<number>(0);
+  const [wrongAnswers, setWrongAnswers] = useState<number>(0);
+
+  useEffect(() => {
+    const rawProgress = localStorage.getItem("quizProgress");
+    if (rawProgress) {
+      const progressData = JSON.parse(rawProgress);
+      if (progressData.progress && progressData.progress["levelFour"]) {
+        const levelProgress = progressData.progress["levelFour"];
+        setCurrentIndex(levelProgress.question + 1 || 0);
+        setRightAnswers(levelProgress.rightAnswers || 0);
+        setWrongAnswers(levelProgress.wrongAnswers || 0);
+      }
+    }
+  }, []);
 
   const handleNext = () => {
     setIsSwitching(false);
@@ -39,6 +57,8 @@ export default function Level4Page() {
     setLoading(true);
     setToast(null);
 
+    const isLastQuestion = currentIndex === questions.length - 1;
+
     try {
       const res = await fetch("/api/validate", {
         method: "POST",
@@ -53,22 +73,31 @@ export default function Level4Page() {
 
       if (data.message.startsWith("✅")) {
         setIsSwitching(true);
+        const updatedRightAnswers = rightAnswers + 1;
+        setRightAnswers(updatedRightAnswers);
+        saveProgress(currentIndex, updatedRightAnswers, wrongAnswers, "Four");
         showToast("✅ Correct! Moving to next question...");
         setTimeout(() => handleNext(), 1500);
         return;
       }
-
       if (data.message.startsWith("❌")) {
         const remaining = attempts - 1;
         setAttempts(remaining);
-
         if (remaining > 0) {
           showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
         } else {
-          setIsSwitching(true);
-          showToast("❌ No attempts left. Moving to next question...");
+          const updatedWrongAnswers = wrongAnswers + 1;
+          setWrongAnswers(updatedWrongAnswers);
+          saveProgress(currentIndex, rightAnswers, updatedWrongAnswers, "Four");
           setCode(questions[currentIndex].solution);
-          setTimeout(() => handleNext(), 2500);
+          if (isLastQuestion) {
+            showToast("✅ No attempts left. Level Complete.");
+            setTimeout(() => setIsLevelComplete(true), 2500);
+          } else {
+            setIsSwitching(true);
+            showToast("❌ No attempts left. Moving to next question...");
+            setTimeout(handleNext, 2500);
+          }
         }
       }
     } catch (err) {
@@ -77,6 +106,10 @@ export default function Level4Page() {
       setLoading(false);
     }
   };
+
+  if (isLevelComplete) {
+    return <LevelComplete level="4" route="levelFive" />;
+  }
 
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
