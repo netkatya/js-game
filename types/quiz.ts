@@ -40,8 +40,6 @@ export interface CodeLevel {
   };
 }
 
-// Загальний тип для будь-якого рівня
-export type Level = QuizLevel | CodeLevel | InputLevel;
 
 // Прогрес залишається без змін
 export interface Progress {

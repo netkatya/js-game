@@ -6,6 +6,7 @@ export default function Footer() {
       <div className="flex justify-center gap-[20px]">
         <p>© {new Date().getFullYear()} A.R.I Game. All rights reserved.</p>
         <p>Developers: Kateryna Pryhoda & Andrii Butenko</p>
+        <p>Designed by Tatiana Kriukovska</p>
         <p>
           Contact us:{" "}
           <Link href="mailto:andrejbutik@gmail.com" className="hover:underline">

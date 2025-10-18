@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { code, solution } = await req.json();
 
@@ -11,25 +11,28 @@ export async function POST(req: Request) {
       );
     }
 
-    // Simple syntax check
     try {
       new Function(code);
-    } catch (err: any) {
-      return NextResponse.json({ message: `❌ Syntax error: ${err.message}` });
+    } catch (err) {
+      if (err instanceof Error) {
+        return NextResponse.json({
+          message: `❌ Syntax error: ${err.message}`,
+        });
+      }
+      return NextResponse.json({ message: "❌ Unknown syntax error" });
     }
 
-    // Normalize code: remove spaces/newlines and unify quotes
     const normalize = (str: string) =>
       str.replace(/\s+/g, "").replace(/['"]/g, '"');
 
     if (normalize(code) === normalize(solution)) {
       return NextResponse.json({ message: "✅ Correct solution!" });
-    } else {
-      return NextResponse.json({
-        message: "❌ Incorrect solution. Try again.",
-      });
     }
-  } catch (err) {
+
+    return NextResponse.json({
+      message: "❌ Incorrect solution. Try again.",
+    });
+  } catch (_err) {
     return NextResponse.json({ message: "❌ Server error" });
   }
 }

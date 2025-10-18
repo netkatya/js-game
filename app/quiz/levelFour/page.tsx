@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 
 import questions from "../../data/level4.json";
 import DotGrid from "@/components/Dots/Dots";
-import { saveProgress } from "@/const/save";
+import { saveProgress } from "@/utils/save";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 
 const MonacoEditor = dynamic(
@@ -15,7 +15,7 @@ const MonacoEditor = dynamic(
 
 export default function Level4Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [code, setCode] = useState(questions[currentIndex].default);
+  const [code, setCode] = useState(questions[0].default || "");
   const [toast, setToast] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
@@ -30,20 +30,38 @@ export default function Level4Page() {
       const progressData = JSON.parse(rawProgress);
       if (progressData.progress && progressData.progress["levelFour"]) {
         const levelProgress = progressData.progress["levelFour"];
-        setCurrentIndex(levelProgress.question + 1 || 0);
-        setRightAnswers(levelProgress.rightAnswers || 0);
-        setWrongAnswers(levelProgress.wrongAnswers || 0);
+        const savedIndex = levelProgress.question || 0;
+        const savedRight = levelProgress.rightAnswers || 0;
+        const savedWrong = levelProgress.wrongAnswers || 0;
+        const totalAnswers = savedRight + savedWrong;
+
+        let nextQuestionIndex = 0;
+        if (totalAnswers > 0) {
+          nextQuestionIndex = savedIndex + 1;
+        }
+        if (nextQuestionIndex >= questions.length) {
+          setIsLevelComplete(true);
+        } else {
+          setCurrentIndex(nextQuestionIndex);
+          setCode(questions[nextQuestionIndex].default || "");
+          setRightAnswers(savedRight);
+          setWrongAnswers(savedWrong);
+        }
       }
     }
   }, []);
 
   const handleNext = () => {
     setIsSwitching(false);
-    const nextIndex = (currentIndex + 1) % questions.length;
-    setCurrentIndex(nextIndex);
-    setCode(questions[nextIndex].default);
-    setToast(null);
-    setAttempts(3);
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < questions.length) {
+      setCurrentIndex(nextIndex);
+      setCode(questions[nextIndex].default || "");
+      setToast(null);
+      setAttempts(3);
+    } else {
+      setIsLevelComplete(true);
+    }
   };
 
   const showToast = (message: string, duration = 2000) => {
@@ -52,7 +70,7 @@ export default function Level4Page() {
   };
 
   const handleValidate = async () => {
-    if (loading) return;
+    if (loading || isSwitching) return;
 
     setLoading(true);
     setToast(null);
@@ -72,12 +90,29 @@ export default function Level4Page() {
       const data = await res.json();
 
       if (data.message.startsWith("✅")) {
-        setIsSwitching(true);
         const updatedRightAnswers = rightAnswers + 1;
         setRightAnswers(updatedRightAnswers);
         saveProgress(currentIndex, updatedRightAnswers, wrongAnswers, "Four");
-        showToast("✅ Correct! Moving to next question...");
-        setTimeout(() => handleNext(), 1500);
+
+        if (isLastQuestion) {
+          showToast("✅ Excellent! Level Complete!");
+          setTimeout(() => setIsLevelComplete(true), 1500);
+          const rawProgress = localStorage.getItem("quizProgress") || "{}";
+          const progressData = JSON.parse(rawProgress);
+          progressData.lastActiveLevel = "levelFive";
+          if (!progressData.progress.levelFive) {
+            progressData.progress.levelFive = {
+              question: -1,
+              rightAnswers: 0,
+              wrongAnswers: 0,
+            };
+          }
+          localStorage.setItem("quizProgress", JSON.stringify(progressData));
+        } else {
+          setIsSwitching(true);
+          showToast("✅ Correct! Moving to next question...");
+          setTimeout(handleNext, 1500);
+        }
         return;
       }
       if (data.message.startsWith("❌")) {
@@ -90,8 +125,9 @@ export default function Level4Page() {
           setWrongAnswers(updatedWrongAnswers);
           saveProgress(currentIndex, rightAnswers, updatedWrongAnswers, "Four");
           setCode(questions[currentIndex].solution);
+
           if (isLastQuestion) {
-            showToast("✅ No attempts left. Level Complete.");
+            showToast("❌ No attempts left. Level Complete.");
             setTimeout(() => setIsLevelComplete(true), 2500);
           } else {
             setIsSwitching(true);
@@ -111,6 +147,12 @@ export default function Level4Page() {
     return <LevelComplete level="4" route="levelFive" />;
   }
 
+  if (!questions[currentIndex]) {
+    return (
+      <main className="relative min-h-screen flex items-center justify-center p-4"></main>
+    );
+  }
+
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
       <div
@@ -120,7 +162,7 @@ export default function Level4Page() {
           left: 0,
           width: "100%",
           height: "100%",
-          zIndex: -1, // фон будет под контентом
+          zIndex: -1,
         }}
       >
         <DotGrid
@@ -135,6 +177,7 @@ export default function Level4Page() {
           returnDuration={1.5}
         />
       </div>
+
       {toast && (
         <div
           className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
@@ -148,7 +191,6 @@ export default function Level4Page() {
           {toast}
         </div>
       )}
-
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
           <h1 className="text-2xl font-bold mb-4 text-left">
@@ -165,7 +207,7 @@ export default function Level4Page() {
         <button
           onClick={handleValidate}
           disabled={loading || isSwitching}
-          className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
+          className={`bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl ${loading || isSwitching ? "pointer-events-none opacity-50" : ""}`}
         >
           {loading ? "Checking..." : "Check Solution"}
         </button>

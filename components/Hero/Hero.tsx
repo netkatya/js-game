@@ -22,11 +22,7 @@ export default function Hero() {
     if (savedProgress) {
       const progressData: ProgressData = JSON.parse(savedProgress);
       setProgress(progressData);
-
-      // --- ОСНОВНА ЛОГІКА ---
-      // Перевіряємо, чи є запис про останній активний рівень
       if (progressData.lastActiveLevel) {
-        // Створюємо посилання, наприклад: "quiz/level1"
         setContinueLink(`quiz/${progressData.lastActiveLevel}`);
       }
     }
@@ -78,7 +74,7 @@ export default function Hero() {
             </li>
 
             <li
-              className={`w-[543px] ${!progress ? "opacity-50 pointer-events-none" : ""}`}
+              className={`w-[543px] ${!progress || progress?.lastActiveLevel === "Completed" ? "opacity-50 pointer-events-none" : ""}`}
             >
               <Link
                 href={continueLink}
