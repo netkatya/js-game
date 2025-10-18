@@ -3,47 +3,69 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
-import questions from "../../data/level4.json";
+import questions from "../../../app/data/level3.json";
 import DotGrid from "@/components/Dots/Dots";
-import { saveProgress } from "@/const/save";
-import LevelComplete from "@/components/LevelComplete/LevelComplete";
+import LevelComplete from "@/components/LevelComplete/LevelComplete"; // Переконайтесь, що цей компонент існує
+
+// Припускаю, що у вас є утиліта saveProgress
+import { saveProgress } from "@/utils/save";
 
 const MonacoEditor = dynamic(
   () => import("../../../components/Monaco/MonacoEditor"),
   { ssr: false }
 );
 
-export default function Level4Page() {
+export default function Level3Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [code, setCode] = useState(questions[currentIndex].default);
+  // ✅ Встановлюємо початковий код для першого питання
+  const [code, setCode] = useState<string>("");
   const [toast, setToast] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
+
+  // ✅ Додано стан для логіки localStorage
   const [isSwitching, setIsSwitching] = useState(false);
-  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
   const [rightAnswers, setRightAnswers] = useState<number>(0);
   const [wrongAnswers, setWrongAnswers] = useState<number>(0);
+  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
 
+  // ✅ Додано useEffect для ЗАВАНТАЖЕННЯ прогресу
   useEffect(() => {
     const rawProgress = localStorage.getItem("quizProgress");
     if (rawProgress) {
       const progressData = JSON.parse(rawProgress);
-      if (progressData.progress && progressData.progress["levelFour"]) {
-        const levelProgress = progressData.progress["levelFour"];
-        const loadedIndex = levelProgress.question || 0;
-        setCurrentIndex(loadedIndex + 1);
-        setCode(questions[loadedIndex].default); // Оновлюємо код для завантаженого питання
-        setRightAnswers(levelProgress.rightAnswers || 0);
-        setWrongAnswers(levelProgress.wrongAnswers || 0);
+      if (progressData.progress && progressData.progress["levelThree"]) {
+        const levelProgress = progressData.progress["levelThree"];
+        const savedIndex = levelProgress.question || 0;
+        const savedRight = levelProgress.rightAnswers || 0;
+        const savedWrong = levelProgress.wrongAnswers || 0;
+        const totalAnswers = savedRight + savedWrong;
+
+        let nextQuestionIndex = 0;
+        if (totalAnswers > 0) {
+          nextQuestionIndex = savedIndex + 1;
+        }
+
+        if (nextQuestionIndex >= questions.length) {
+          setIsLevelComplete(true);
+        } else {
+          setCurrentIndex(nextQuestionIndex);
+          // Встановлюємо код для завантаженого питання
+          setCode("");
+        }
+        setRightAnswers(savedRight);
+        setWrongAnswers(savedWrong);
       }
     }
-  }, []);
+  }, []); // Пустий масив -- запускається один раз
 
+  // ✅ Оновлено handleNext
   const handleNext = () => {
     setIsSwitching(false);
-    const nextIndex = currentIndex + 1; // Просто переходимо до наступного
+    const nextIndex = currentIndex + 1; // Просто йдемо до наступного індексу
     setCurrentIndex(nextIndex);
-    setCode(questions[nextIndex].default);
+    // Встановлюємо початковий код для НАСТУПНОГО питання
+    setCode("");
     setToast(null);
     setAttempts(3);
   };
@@ -53,9 +75,9 @@ export default function Level4Page() {
     setTimeout(() => setToast(null), duration);
   };
 
+  // ✅ Оновлено handleValidate
   const handleValidate = async () => {
     if (loading || isSwitching) return;
-
     setLoading(true);
     setToast(null);
 
@@ -76,14 +98,24 @@ export default function Level4Page() {
       if (data.message.startsWith("✅")) {
         const updatedRightAnswers = rightAnswers + 1;
         setRightAnswers(updatedRightAnswers);
-
-        // ✅ ВИПРАВЛЕНО ОПИСКУ: "Four" -> "levelFour"
+        // Зберігаємо прогрес (використовуємо "levelThree" як ключ)
         saveProgress(currentIndex, updatedRightAnswers, wrongAnswers, "Three");
 
-        // ✅ ДОДАНО ЛОГІКУ ЗАВЕРШЕННЯ РІВНЯ
         if (isLastQuestion) {
           showToast("✅ Excellent! Level Complete!");
           setTimeout(() => setIsLevelComplete(true), 1500);
+          // Готуємо наступний рівень
+          const rawProgress = localStorage.getItem("quizProgress") || "{}";
+          const progressData = JSON.parse(rawProgress);
+          progressData.lastActiveLevel = "levelFour";
+          if (!progressData.progress.levelFour) {
+            progressData.progress.levelFour = {
+              question: 0,
+              rightAnswers: 0,
+              wrongAnswers: 0,
+            };
+          }
+          localStorage.setItem("quizProgress", JSON.stringify(progressData));
         } else {
           setIsSwitching(true);
           showToast("✅ Correct! Moving to next question...");
@@ -95,6 +127,7 @@ export default function Level4Page() {
       if (data.message.startsWith("❌")) {
         const remaining = attempts - 1;
         setAttempts(remaining);
+
         if (remaining > 0) {
           showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
         } else {
@@ -125,14 +158,22 @@ export default function Level4Page() {
     }
   };
 
+  // ✅ Додано екран завершення
   if (isLevelComplete) {
-    // ✅ ВИПРАВЛЕНО НОМЕР РІВНЯ
     return <LevelComplete level="3" route="levelFour" />;
+  }
+
+  // Захист від помилки, якщо `questions[currentIndex]` ще не завантажено
+  if (!questions[currentIndex]) {
+    return (
+      <main className="relative min-h-screen flex items-center justify-center p-4">
+        {/* Тут може бути індикатор завантаження */}
+      </main>
+    );
   }
 
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
-      {/* ... ваша верстка залишається без змін ... */}
       <div
         style={{
           position: "absolute",
@@ -146,8 +187,8 @@ export default function Level4Page() {
         <DotGrid
           dotSize={9}
           gap={15}
-          baseColor="#120953"
-          activeColor="#1481F5"
+          baseColor="#02AFE8"
+          activeColor="#5227FF"
           proximity={120}
           shockRadius={250}
           shockStrength={5}
@@ -171,9 +212,7 @@ export default function Level4Page() {
 
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
-          <h1 className="text-2xl font-bold mb-4 text-left">
-            Level 4: Functions
-          </h1>
+          <h1 className="text-2xl font-bold mb-4 text-left">Level 3: Code</h1>
           <strong>Task:</strong> {questions[currentIndex].question}
           <div className="w-full mt-4">
             <MonacoEditor value={code} onChange={setCode} />
@@ -182,11 +221,10 @@ export default function Level4Page() {
             {currentIndex + 1}/{questions.length}
           </div>
         </div>
-
         <button
           onClick={handleValidate}
-          disabled={loading || isSwitching}
-          className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
+          disabled={loading || isSwitching} // ✅ Оновлено disabled
+          className={`bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl ${loading || isSwitching ? "pointer-events-none opacity-50" : ""}`}
         >
           {loading ? "Checking..." : "Check Solution"}
         </button>
