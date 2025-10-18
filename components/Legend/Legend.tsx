@@ -2,10 +2,10 @@ import Image from "next/image";
 
 export default function Legend() {
   return (
-    <section className="p-[40px] flex justify-center">
-      <div className="bg-[#079cde] max-w-[1127px] p-[34px] flex gap-[40px] rounded-[40px]">
-        <div className="max-w-[540px] flex flex-col gap-[16px] justify-center items-center">
-          <h2 className="third-font font-semibold text-4xl text-center text-black max-w-[350px]">
+    <section className="p-[40px] flex justify-center" id="legend">
+      <div className="bg-[#079cde] max-w-[1127px] p-[20px] flex jystify-center items-center gap-[40px] rounded-[40px]">
+        <div className="max-w-[540px] flex flex-col gap-[4px] justify-center items-center">
+          <h2 className="third-font font-semibold text-3xl text-center text-black max-w-[350px]">
             Legend — The Beginning of A.R.I.
           </h2>
           <div className="p-[16px] border border-black">
@@ -28,11 +28,13 @@ export default function Legend() {
             “Teach me, human. And maybe… later, I will teach you.”
           </p>
         </div>
+
         <Image
-          src="/img/robot_level_comp.png"
-          width={400}
-          height={680}
+          src="/img/robot-legend.png"
+          width={340}
+          height={580}
           alt="robot"
+          className="w-[360px] h-[500px]"
         ></Image>
       </div>
     </section>
