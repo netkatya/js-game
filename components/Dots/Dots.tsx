@@ -10,11 +10,11 @@ const throttle = <T extends (...args: unknown[]) => void>(
   limit: number
 ): T => {
   let lastCall = 0;
-  return function (this: unknown, ...args: Parameters<T>) {
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
     const now = performance.now();
     if (now - lastCall >= limit) {
       lastCall = now;
-      func.apply(this, args);
+      func.apply(this, args as never); // 👈 приводим тип безопасно
     }
   } as T;
 };
@@ -271,7 +271,7 @@ const DotGrid: React.FC<DotGridProps> = ({
       }
     };
 
-    const throttledMove = throttle(onMove, 50);
+    const throttledMove = throttle(onMove as (...args: unknown[]) => void, 50);
     window.addEventListener("mousemove", throttledMove, { passive: true });
     window.addEventListener("click", onClick);
 

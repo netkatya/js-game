@@ -187,8 +187,8 @@ export default function Level3Page() {
         <DotGrid
           dotSize={9}
           gap={15}
-          baseColor="#02AFE8"
-          activeColor="#5227FF"
+          baseColor="#120953"
+          activeColor="#1481F5"
           proximity={120}
           shockRadius={250}
           shockStrength={5}
