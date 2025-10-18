@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 
 import questions from "../../data/level5.json";
 import DotGrid from "@/components/Dots/Dots";
-import { saveProgress } from "@/const/save";
+import { saveProgress } from "@/utils/save";
 import { useRouter } from "next/navigation";
 
 const MonacoEditor = dynamic(
@@ -21,39 +21,45 @@ export default function Level5Page() {
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
   const [isSwitching, setIsSwitching] = useState(false);
-
-  // --- Що було додано (1/4): Стан для балів та завершення ---
   const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
   const [rightAnswers, setRightAnswers] = useState<number>(0);
   const [wrongAnswers, setWrongAnswers] = useState<number>(0);
 
-  // --- Що було додано (2/4): Завантаження прогресу ---
   useEffect(() => {
     const rawProgress = localStorage.getItem("quizProgress");
     if (rawProgress) {
       const progressData = JSON.parse(rawProgress);
       if (progressData.progress && progressData.progress["levelFive"]) {
         const levelProgress = progressData.progress["levelFive"];
-        const loadedIndex = levelProgress.question || 0;
-        setCurrentIndex(loadedIndex + 1);
-        setCode(questions[loadedIndex].default);
-        setRightAnswers(levelProgress.rightAnswers || 0);
-        setWrongAnswers(levelProgress.wrongAnswers || 0);
+        const savedIndex = levelProgress.question || 0;
+        const savedRight = levelProgress.rightAnswers || 0;
+        const savedWrong = levelProgress.wrongAnswers || 0;
+        const totalAnswers = savedRight + savedWrong;
+
+        let nextQuestionIndex = 0;
+        if (totalAnswers > 0) {
+          nextQuestionIndex = savedIndex + 1;
+        }
+        if (nextQuestionIndex >= questions.length) {
+          setIsLevelComplete(true);
+        } else {
+          setCurrentIndex(nextQuestionIndex);
+          setCode(questions[nextQuestionIndex].default || "");
+          setRightAnswers(savedRight);
+          setWrongAnswers(savedWrong);
+        }
       }
     }
   }, []);
   useEffect(() => {
-    // Цей код виконається ТІЛЬКИ ТОДІ, коли isLevelComplete зміниться на true
     if (isLevelComplete) {
-      router.push("/final"); // або будь-який інший маршрут
+      router.push("/final");
     }
-  }, [isLevelComplete, router]); // Dependency array
-
-  // --- Що було додано (3/4): Функція збереження прогресу ---
+  }, [isLevelComplete, router]);
 
   const handleNext = () => {
     setIsSwitching(false);
-    const nextIndex = currentIndex + 1; // Просто переходимо до наступного
+    const nextIndex = currentIndex + 1;
     setCurrentIndex(nextIndex);
     setCode(questions[nextIndex].default);
     setToast(null);
@@ -65,7 +71,6 @@ export default function Level5Page() {
     setTimeout(() => setToast(null), duration);
   };
 
-  // --- Що було додано (4/4): Оновлена логіка валідації та завершення ---
   const handleValidate = async () => {
     if (loading || isSwitching) return;
     setLoading(true);
@@ -130,11 +135,8 @@ export default function Level5Page() {
     }
   };
 
-  // Показуємо екран завершення, якщо рівень пройдено
-
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
-      {/* ... ваша верстка залишається без змін ... */}
       <div
         style={{
           position: "absolute",
@@ -189,7 +191,7 @@ export default function Level5Page() {
         <button
           onClick={handleValidate}
           disabled={loading || isSwitching}
-          className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
+          className={`bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl ${loading || isSwitching ? "pointer-events-none opacity-50" : ""}`}
         >
           {loading ? "Checking..." : "Check Solution"}
         </button>

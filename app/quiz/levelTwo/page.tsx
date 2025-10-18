@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { InputTask } from "@/types/quiz";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import DotGrid from "@/components/Dots/Dots";
-import { saveProgress } from "@/const/save";
+import { saveProgress } from "@/utils/save";
 
 export default function LevelTwo() {
   const questions: InputTask[] = level2Data;
@@ -25,9 +25,31 @@ export default function LevelTwo() {
       const progressData = JSON.parse(rawProgress);
       if (progressData.progress && progressData.progress["levelTwo"]) {
         const levelProgress = progressData.progress["levelTwo"];
-        setCurrentQuestionIndex(levelProgress.question + 1 || 0);
-        setRightAnswers(levelProgress.rightAnswers || 0);
-        setWrongAnswers(levelProgress.wrongAnswers || 0);
+
+        // ✅ ОСНОВНЕ ВИПРАВЛЕННЯ ТУТ
+
+        const savedIndex = levelProgress.question || 0;
+        const savedRight = levelProgress.rightAnswers || 0;
+        const savedWrong = levelProgress.wrongAnswers || 0;
+
+        // Рахуємо загальну кількість відповідей, щоб знати, чи почата гра
+        const totalAnswers = savedRight + savedWrong;
+
+        if (totalAnswers === 0) {
+          // Якщо гра не почата (0 відповідей), починаємо з першого питання
+          setCurrentQuestionIndex(0);
+        } else {
+          // Якщо гра почата, завантажуємо НАСТУПНЕ питання
+          const nextQuestionIndex = savedIndex + 1;
+          if (nextQuestionIndex >= questions.length) {
+            setIsLevelComplete(true);
+          } else {
+            setCurrentQuestionIndex(nextQuestionIndex);
+          }
+        }
+
+        setRightAnswers(savedRight);
+        setWrongAnswers(savedWrong);
       }
     }
   }, []);
@@ -43,14 +65,12 @@ export default function LevelTwo() {
 
   const question = questions[currentQuestionIndex];
 
-  // ✅ ВИПРАВЛЕНА ЛОГІКА ПЕРЕВІРКИ ТА ЗБЕРЕЖЕННЯ
   const handleCheckAnswer = () => {
     if (userInput.trim().toLowerCase() === question.answer.toLowerCase()) {
       const updatedRightAnswers = rightAnswers + 1;
       setRightAnswers(updatedRightAnswers);
       setValidationStatus("correct");
       showToast("✅ Correct!");
-      // Зберігаємо прогрес одразу після правильної відповіді
       saveProgress(
         currentQuestionIndex,
         updatedRightAnswers,
@@ -66,7 +86,6 @@ export default function LevelTwo() {
         const updatedWrongAnswers = wrongAnswers + 1;
         setWrongAnswers(updatedWrongAnswers);
         showToast("❌ No attempts left. Look at the right answers");
-        // Зберігаємо прогрес, коли закінчились спроби
         saveProgress(
           currentQuestionIndex,
           rightAnswers,
@@ -77,7 +96,6 @@ export default function LevelTwo() {
     }
   };
 
-  // ✅ СПРОЩЕНА ЛОГІКА ПЕРЕХОДУ
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
