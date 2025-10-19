@@ -3,19 +3,27 @@ import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "404 | Page Not Found",
-  description: "This page doesn'n exist",
+  description: "This page doesn’t exist",
   openGraph: {
     title: "404 | Page Not Found",
-    description: "This page doesn'n exist",
+    description: "This page doesn’t exist",
     url: "https://js-game-seven-indol.vercel.app/not-found",
     images: [
       {
-        url: "https://js-game-seven-indol.vercel.app/img/og-image.png",
+        url: "https://js-game-seven-indol.vercel.app/img/crying-404.png",
         width: 1200,
         height: 630,
-        alt: "Note Hub Logo",
+        alt: "A.R.I. 404 Page",
       },
     ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "404 | Page Not Found",
+    description: "This page doesn’t exist",
+    images: ["https://js-game-seven-indol.vercel.app/img/crying-404.png"],
   },
 };
 
@@ -27,8 +35,8 @@ export default function NotFound() {
           src="/img/crying-404.png"
           width={1100}
           height={600}
-          alt="page not found"
-        ></Image>
+          alt="Page not found"
+        />
       </div>
     </>
   );
