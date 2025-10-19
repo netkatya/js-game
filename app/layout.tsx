@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "A.R.I. Game",
     images: [
       {
-        url: "/img/og-image.png",
+        url: "https://js-game-seven-indol.vercel.app/img/og-image.png",
         width: 1200,
         height: 630,
         alt: "A.R.I. — JavaScript learning game",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "A.R.I. — Learn JavaScript",
     description:
       "Train your coding skills with A.R.I. — the AI that learns from your logic.",
-    images: ["/img/og-image.png"],
+    images: ["https://js-game-seven-indol.vercel.app/img/og-image.png"],
   },
 };
 

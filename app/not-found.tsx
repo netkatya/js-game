@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     url: "https://js-game-seven-indol.vercel.app/not-found",
     images: [
       {
-        url: "/img/og-image.png",
+        url: "https://js-game-seven-indol.vercel.app/img/og-image.png",
         width: 1200,
         height: 630,
         alt: "Note Hub Logo",
