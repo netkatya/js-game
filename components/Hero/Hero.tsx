@@ -35,7 +35,7 @@ export default function Hero() {
   return (
     <section className="pt-[40px] md:pt-[80px] pb-[60px]">
       <div className="flex items-center justify-center gap-[32px] md:gap-[40px] pl-[20px] pr-[20px]">
-        <div className="relative w-1/3 w-[140px] h-[215px] md:aspect-square overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
+        <div className="relative w-1/3 w-[140px] h-[215px] md:w-[540px] md:h-[540px] overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
           <video
             src="/gif/robot.mp4"
             autoPlay
