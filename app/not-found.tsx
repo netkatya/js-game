@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import css from "./not-found.module.css";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <>
-      <div className="w-[900px] h-[600px] m-auto">
+      <div className="max-w-[900px] max-h-[600px] m-auto">
         <Image
           src="/img/crying-404.png"
           width={1100}
