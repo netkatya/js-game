@@ -35,7 +35,7 @@ export default function Hero() {
   return (
     <section className="pt-[40px] md:pt-[80px] pb-[20px] md:pb-[60px]">
       <div className="flex items-center justify-center gap-[24px] md:gap-[40px] pl-[10px] pr-[10px] md:pl-[20px] md:pr-[20px]">
-        <div className="relative w-1/3 min-w-[180px] h-[278px] md:w-[540px] md:h-[540px] overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
+        <div className="relative w-1/3 w-[180px] h-[278px] md:w-[520px] md:h-[520px] overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
           <video
             src="/gif/robot.mp4"
             autoPlay
@@ -49,7 +49,7 @@ export default function Hero() {
         </div>
 
         <div className="font-semibold text-center w-[561px] h-[446px] mb-0 md:mb-[40px] md:w-[561px] md:h-[446px] w-auto h-auto">
-          <div className="w-[140px] h-[190px] md:w-[513px] md:h-[200px]">
+          <div className="w-[140px] h-[190px] md:w-[543px] md:h-[200px]">
             <TextType
               text={[
                 `Hello, human...\nMy name is A.R.I. — Artificial Robotic Instructor.\nI know JavaScript, but I cannot think like a programmer.\nWill you teach me?`,
