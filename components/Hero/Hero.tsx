@@ -35,7 +35,7 @@ export default function Hero() {
   return (
     <section className="pt-[40px] md:pt-[80px] pb-[60px]">
       <div className="flex items-center justify-center gap-[24px] md:gap-[40px] pl-[10px] pr-[10px] md:pl-[20px] md:pr-[20px]">
-        <div className="relative w-1/3 w-[180px] h-[280px] md:w-[540px] md:h-[540px] overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
+        <div className="relative w-1/3 w-[180px] h-[278px] md:w-[540px] md:h-[540px] overflow-hidden rounded-2xl border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE]">
           <video
             src="/gif/robot.mp4"
             autoPlay
@@ -66,7 +66,7 @@ export default function Hero() {
               <Link
                 href="quiz/levelOne"
                 onClick={startNewGameClick}
-                className="block w-full p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-md 
+                className="block w-full p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-xl md:rounded-[6px] 
        text-[15px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
               >
                 Start training
@@ -82,7 +82,7 @@ export default function Hero() {
             >
               <Link
                 href={continueLink}
-                className="block w-full p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-md 
+                className="block w-full p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-xl md:rounded-[6px] 
        text-[15px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
               >
                 Continue
