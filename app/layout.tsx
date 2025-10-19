@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "A.R.I. Game",
     images: [
       {
-        url: "/img/og-image.jpg",
+        url: "/img/og-image.png",
         width: 1200,
         height: 630,
         alt: "A.R.I. — JavaScript learning game",
