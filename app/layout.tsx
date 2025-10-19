@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "A.R.I. — Learn JavaScript",
     description:
       "Interactive coding game where you teach an AI through JavaScript challenges.",
-    url: "https://.com/",
+    url: "https://js-game-seven-indol.vercel.app/",
     siteName: "A.R.I. Game",
     images: [
       {
