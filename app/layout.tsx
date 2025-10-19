@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "A.R.I. — Learn JavaScript",
     description:
       "Train your coding skills with A.R.I. — the AI that learns from your logic.",
-    images: ["/img/og-image.jpg"],
+    images: ["/img/og-image.png"],
   },
 };
 
