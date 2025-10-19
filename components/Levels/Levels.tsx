@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Levels() {
   return (
     <section
-      className="pt-[20px] md:pt-[60px] pb-[40px] flex justify-center"
+      className="scroll-mt-[70px] md:scroll-mt-[50px] pt-[20px] md:pt-[60px] pb-[40px] flex justify-center"
       id="levels"
     >
       <div className="pl-[20px] pr-[20px] max-w-[1200px]">
