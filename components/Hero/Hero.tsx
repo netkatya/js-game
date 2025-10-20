@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import TextType from "../TextType/TextType";
-
-// Додамо тип для даних, що зберігаються, для кращої читабельності
 interface ProgressData {
   lastActiveLevel: string;
   progress: {
@@ -14,7 +12,6 @@ interface ProgressData {
 
 export default function Hero() {
   const [progress, setProgress] = useState<ProgressData | null>(null);
-  // Новий стан для зберігання динамічного посилання на останню гру
   const [continueLink, setContinueLink] = useState<string>("#");
 
   useEffect(() => {

@@ -7,12 +7,23 @@ export default function Footer() {
         <p>© {new Date().getFullYear()} A.R.I Game. All rights reserved.</p>
         <p>Developers: Kateryna Pryhoda & Andrii Butenko</p>
         <p>Designed by Tatiana Kriukovska</p>
-        <p>
-          Contact us:{" "}
-          <Link href="mailto:andrejbutik@gmail.com" className="hover:underline">
-            testmail@gmail.com
+        <div className="flex flex-row gap-[5px]">
+          <p>Our Linkedin:</p>
+          <Link
+            href="https://www.linkedin.com/in/kateryna-pryhoda"
+            className="hover:underline"
+            target="_blank"
+          >
+            Kateryna Pryhoda
           </Link>
-        </p>
+          <Link
+            href="https://www.linkedin.com/in/andrii-butenko-5190a6371"
+            className="hover:underline"
+            target="_blank"
+          >
+            Andrii Butenko
+          </Link>
+        </div>
       </div>
     </footer>
   );
