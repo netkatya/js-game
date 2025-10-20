@@ -1,5 +1,6 @@
 "use client";
 import TextType from "@/components/TextType/TextType";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   Bar,
@@ -44,6 +45,9 @@ export default function FinalPage() {
       { level: "Incorrect", score: totalWrongAnswers },
     ]);
   }, []);
+  const startNewGameClick = () => {
+    localStorage.removeItem("quizProgress");
+  };
 
   return (
     <main className="pt-[20px] pb-[20px] md:pt-[40px] pb-[40px] bg-[#000017] min-h-screen text-white">
@@ -109,6 +113,16 @@ export default function FinalPage() {
             </ResponsiveContainer>
           </div>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <Link
+          href="quiz/levelOne"
+          onClick={startNewGameClick}
+          className="block w-[290px] mt-[100px] p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-xl md:rounded-[6px] 
+       text-[15px] md:w-[500px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
+        >
+          Start Again
+        </Link>
       </div>
     </main>
   );
