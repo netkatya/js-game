@@ -103,7 +103,7 @@ export default function Level1Page() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
+    <main className="min-h-screen flex items-center justify-center p-[10px] md:p-4">
       <div
         style={{
           position: "absolute",
@@ -129,9 +129,11 @@ export default function Level1Page() {
       <div className="w-full max-w-2xl text-white">
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold mb-4">Level 1: Tests</h1>
+            <h1 className="text-xl md:text-2xl font-bold mb-4">
+              Level 1: Tests
+            </h1>
           </div>
-          <h3 className="text-xl font-semibold text-center mb-8">
+          <h3 className="text-[16px] md:text-xl font-semibold text-center mb-8">
             {question.question}
           </h3>
           <div className="space-y-4">

@@ -175,12 +175,12 @@ export default function Level5Page() {
       )}
 
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
-        <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
-          <h1 className="text-2xl font-bold mb-4 text-left">
+        <div className="p-2 md:p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
+          <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-4 text-left">
             Level 5: Debugging
           </h1>
           <strong>Task:</strong> {questions[currentIndex].question}
-          <div className="w-full mt-4">
+          <div className="w-full mt-2 md:mt-4">
             <MonacoEditor value={code} onChange={setCode} />
           </div>
           <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">

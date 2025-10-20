@@ -10,7 +10,7 @@ interface MonacoEditorProps {
 export default function MonacoEditor({ value, onChange }: MonacoEditorProps) {
   return (
     <Editor
-      height="300px"
+      height="280px"
       language="javascript"
       value={value}
       onChange={(v) => onChange(v ?? "")}
