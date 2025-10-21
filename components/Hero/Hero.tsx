@@ -65,6 +65,7 @@ export default function Hero() {
                 onClick={startNewGameClick}
                 className="block w-full p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-xl md:rounded-[6px] 
        text-[15px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
+                aria-label="start button"
               >
                 Start training
               </Link>
@@ -81,6 +82,7 @@ export default function Hero() {
                 href={continueLink}
                 className="block w-full p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-xl md:rounded-[6px] 
        text-[15px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
+                aria-label="continue button"
               >
                 Continue
               </Link>

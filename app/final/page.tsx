@@ -120,6 +120,7 @@ export default function FinalPage() {
           onClick={startNewGameClick}
           className="block w-[290px] mt-[100px] p-2 md:p-3 text-center border-2 md:border-3 border-solid border-[#079cde] rounded-xl md:rounded-[6px] 
        text-[15px] md:w-[500px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
+          aria-label="start again"
         >
           Start Again
         </Link>

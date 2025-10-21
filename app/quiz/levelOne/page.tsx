@@ -159,6 +159,7 @@ export default function Level1Page() {
               <button
                 onClick={handleNextQuestion}
                 className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
+                aria-label="check button"
               >
                 Next question
               </button>

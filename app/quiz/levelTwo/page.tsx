@@ -230,6 +230,7 @@ export default function LevelTwo() {
                 onClick={handleCheckAnswer}
                 disabled={!userInput}
                 className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="check button"
               >
                 Check
               </button>

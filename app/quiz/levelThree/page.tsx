@@ -227,6 +227,7 @@ export default function Level3Page() {
           onClick={handleValidate}
           disabled={loading || isSwitching} // ✅ Оновлено disabled
           className={`bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl ${loading || isSwitching ? "pointer-events-none opacity-50" : ""}`}
+          aria-label="check button"
         >
           {loading ? "Checking..." : "Check Solution"}
         </button>

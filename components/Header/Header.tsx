@@ -48,6 +48,7 @@ export default function Header() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="md:hidden text-[#079CDE] focus:outline-none"
+        aria-label="open menu"
       >
         {isOpen ? <X size={36} /> : <Menu size={36} />}
       </button>
@@ -59,7 +60,7 @@ export default function Header() {
       >
         <div className="flex justify-between items-center p-6 border-b border-[#079CDE]">
           <Image src="/logo.png" alt="logo" width={60} height={60} />
-          <button onClick={() => setIsOpen(false)}>
+          <button onClick={() => setIsOpen(false)} aria-label="close menu">
             <X size={30} />
           </button>
         </div>
