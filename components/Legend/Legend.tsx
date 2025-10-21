@@ -31,14 +31,15 @@ export default function Legend() {
             “Teach me, human. And maybe… later, I will teach you.”
           </p>
         </div>
-
-        <Image
-          src="/img/robot-legend.png"
-          width={340}
-          height={580}
-          alt="robot"
-          className="hidden md:block w-[360px] h-[500px]"
-        ></Image>
+        <div className="hidden md:flex md:w-[360px] md:h-[560px] bg-[#000017] justify-center items-center rounded-[16px]">
+          <Image
+            src="/img/robot-legend.png"
+            width={300}
+            height={450}
+            alt="robot"
+            className="hidden md:block w-[300px] h-[450px]"
+          ></Image>
+        </div>
       </div>
     </section>
   );
