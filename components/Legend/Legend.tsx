@@ -37,7 +37,7 @@ export default function Legend() {
             width={300}
             height={450}
             alt="robot"
-            className="hidden md:block w-[300px] h-[450px]"
+            className="hidden md:block w-[320px] h-auto object-contain"
           ></Image>
         </div>
       </div>
