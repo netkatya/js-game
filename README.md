@@ -65,9 +65,3 @@ The game tracks your progress and shows **end-of-game statistics**, helping you 
 
 ---
 
-## 🚀 Future Plans
-
-- Difficulty levels and progression system  
-- Hints and explanations for coding challenges  
-- Enhanced statistics and analytics  
-- Cloud save of player progress
