@@ -32,11 +32,11 @@ export default function Level4Page() {
   const [rightAnswers, setRightAnswers] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState(0);
 
-  // --- DETECT LANGUAGE ---
+  // --- LANGUAGE DETECTOR ---
   const getLang = () =>
     (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "en";
 
-  // --- LOAD QUESTIONS BY LANGUAGE ---
+  // --- LOAD QUESTIONS ---
   const loadQuestions = async () => {
     try {
       const lang = getLang();
@@ -52,7 +52,6 @@ export default function Level4Page() {
     }
   };
 
-  // Load once
   useEffect(() => {
     loadQuestions();
   }, []);
@@ -90,13 +89,11 @@ export default function Level4Page() {
     setCode(data[next].default || "");
   };
 
-  // --- SHOW TOAST ---
   const showToast = (msg: string, dur = 2000) => {
     setToast(msg);
     setTimeout(() => setToast(null), dur);
   };
 
-  // --- NEXT QUESTION ---
   const handleNext = () => {
     setIsSwitching(false);
     const nextIndex = currentIndex + 1;
@@ -111,7 +108,6 @@ export default function Level4Page() {
     }
   };
 
-  // --- VALIDATE ---
   const handleValidate = async () => {
     if (loading || isSwitching) return;
 
