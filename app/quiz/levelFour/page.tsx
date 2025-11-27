@@ -21,37 +21,34 @@ type Question = {
 export default function Level4Page() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const [code, setCode] = useState("");
   const [toast, setToast] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
   const [isSwitching, setIsSwitching] = useState(false);
   const [isLevelComplete, setIsLevelComplete] = useState(false);
-
   const [rightAnswers, setRightAnswers] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState(0);
 
-  // --- LANGUAGE DETECTOR ---
+  // --- DETECT LANGUAGE ---
   const getLang = () =>
-    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "en";
+    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "EN";
 
-  // --- LOAD QUESTIONS ---
+  // --- LOAD QUESTIONS BY LANGUAGE ---
   const loadQuestions = async () => {
+    const lang = getLang();
     try {
-      const lang = getLang();
       const res = await fetch(`/data/${lang}/level4.json`);
       const data: Question[] = await res.json();
-
       setQuestions(data);
       setCode(data[0]?.default || "");
-
       restoreProgress(data);
     } catch (err) {
       console.error("Error loading Level 4:", err);
     }
   };
 
+  // Load once
   useEffect(() => {
     loadQuestions();
   }, []);
@@ -131,7 +128,6 @@ export default function Level4Page() {
       if (data.message.startsWith("✅")) {
         const updatedRight = rightAnswers + 1;
         setRightAnswers(updatedRight);
-
         saveProgress(currentIndex, updatedRight, wrongAnswers, "Four");
 
         if (isLast) {
@@ -169,9 +165,7 @@ export default function Level4Page() {
       } else {
         const updatedWrong = wrongAnswers + 1;
         setWrongAnswers(updatedWrong);
-
         saveProgress(currentIndex, rightAnswers, updatedWrong, "Four");
-
         setCode(questions[currentIndex].solution);
 
         if (isLast) {
@@ -190,7 +184,6 @@ export default function Level4Page() {
     }
   };
 
-  // UI
   if (isLevelComplete) {
     return <LevelComplete level="4" route="levelFive" />;
   }
@@ -205,14 +198,7 @@ export default function Level4Page() {
 
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
-      {/* Background */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: -1,
-        }}
-      >
+      <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
         <DotGrid
           dotSize={9}
           gap={15}
@@ -226,7 +212,6 @@ export default function Level4Page() {
         />
       </div>
 
-      {/* Toast */}
       {toast && (
         <div
           className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg ${
