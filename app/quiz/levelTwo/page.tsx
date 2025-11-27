@@ -3,118 +3,69 @@ import level2Data from "@/app/data/level2.json";
 import { useState, useEffect } from "react";
 import { InputTask } from "@/types/quiz";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
-import DotGrid from "@/components/Dots/Dots";
-import { saveProgress } from "@/utils/save";
-
+import { useLevelLogic } from "@/hooks/useLevelLogic";
+import { getInputClasses, saveProgress, showToast } from "@/utils/functions";
+import Toast from "@/components/Toast/Toast";
 export default function LevelTwo() {
   const questions: InputTask[] = level2Data;
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+  const {
+    currentIndex,
+    rightAnswers,
+    wrongAnswers,
+    isLevelComplete,
+    setRightAnswers,
+    setWrongAnswers,
+    // saveProgress, // Використовуємо свою функцію з utils
+    goToNextQuestionOrComplete,
+  } = useLevelLogic({ levelId: "levelTwo", questionCount: questions.length });
   const [userInput, setUserInput] = useState<string>("");
-  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
   const [validationStatus, setValidationStatus] = useState<
     "idle" | "correct" | "incorrect"
   >("idle");
   const [attemptsLeft, setAttemptsLeft] = useState<number>(2);
-  const [rightAnswers, setRightAnswers] = useState<number>(0);
-  const [wrongAnswers, setWrongAnswers] = useState<number>(0);
   const [toast, setToast] = useState<string | null>(null);
 
-  useEffect(() => {
-    const rawProgress = localStorage.getItem("quizProgress");
-    if (rawProgress) {
-      const progressData = JSON.parse(rawProgress);
-      if (progressData.progress && progressData.progress["levelTwo"]) {
-        const levelProgress = progressData.progress["levelTwo"];
-
-        // ✅ ОСНОВНЕ ВИПРАВЛЕННЯ ТУТ
-
-        const savedIndex = levelProgress.question || 0;
-        const savedRight = levelProgress.rightAnswers || 0;
-        const savedWrong = levelProgress.wrongAnswers || 0;
-
-        // Рахуємо загальну кількість відповідей, щоб знати, чи почата гра
-        const totalAnswers = savedRight + savedWrong;
-
-        if (totalAnswers === 0) {
-          // Якщо гра не почата (0 відповідей), починаємо з першого питання
-          setCurrentQuestionIndex(0);
-        } else {
-          // Якщо гра почата, завантажуємо НАСТУПНЕ питання
-          const nextQuestionIndex = savedIndex + 1;
-          if (nextQuestionIndex >= questions.length) {
-            setIsLevelComplete(true);
-          } else {
-            setCurrentQuestionIndex(nextQuestionIndex);
-          }
-        }
-
-        setRightAnswers(savedRight);
-        setWrongAnswers(savedWrong);
-      }
-    }
-  }, [questions.length]);
-  const showToast = (message: string, duration = 2000) => {
-    setToast(message);
-    setTimeout(() => setToast(null), duration);
-  };
   useEffect(() => {
     setUserInput("");
     setValidationStatus("idle");
     setAttemptsLeft(2);
-  }, [currentQuestionIndex]);
+  }, [currentIndex]);
 
-  const question = questions[currentQuestionIndex];
+  if (isLevelComplete) {
+    return <LevelComplete level="2" route="levelThree" />;
+  }
+
+  const question = questions[currentIndex];
 
   const handleCheckAnswer = () => {
+    let finalRight = rightAnswers;
+    let finalWrong = wrongAnswers;
+
     if (userInput.trim().toLowerCase() === question.answer.toLowerCase()) {
-      const updatedRightAnswers = rightAnswers + 1;
-      setRightAnswers(updatedRightAnswers);
+      finalRight++;
+      setRightAnswers(finalRight);
       setValidationStatus("correct");
-      showToast("✅ Correct!");
-      saveProgress(
-        currentQuestionIndex,
-        updatedRightAnswers,
-        wrongAnswers,
-        "Two"
-      );
+      showToast("✅ Correct!", setToast);
     } else {
       const newAttemptsLeft = attemptsLeft - 1;
-      showToast(`❌ Incorrect. You have ${newAttemptsLeft} attempt(s) left.`);
+      showToast(
+        `❌ Incorrect. You have ${newAttemptsLeft} attempt(s) left.`,
+        setToast
+      );
       setAttemptsLeft(newAttemptsLeft);
       setValidationStatus("incorrect");
       if (newAttemptsLeft === 0) {
-        const updatedWrongAnswers = wrongAnswers + 1;
-        setWrongAnswers(updatedWrongAnswers);
-        showToast("❌ No attempts left. Look at the right answers");
-        saveProgress(
-          currentQuestionIndex,
-          rightAnswers,
-          updatedWrongAnswers,
-          "Two"
-        );
+        finalWrong++;
+        setWrongAnswers(finalWrong);
+        showToast("❌ No attempts left. Look at the right answers", setToast);
       }
     }
+    saveProgress(currentIndex, finalRight, finalWrong, "Two");
   };
 
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      const nextIndex = currentQuestionIndex + 1;
-      setCurrentQuestionIndex(nextIndex);
-      setToast(null);
-    } else {
-      setIsLevelComplete(true);
-      const rawProgress = localStorage.getItem("quizProgress") || "{}";
-      const progressData = JSON.parse(rawProgress);
-      progressData.lastActiveLevel = "levelThree";
-      if (!progressData.progress.levelThree) {
-        progressData.progress.levelThree = {
-          question: 0,
-          rightAnswers: 0,
-          wrongAnswers: 0,
-        };
-      }
-      localStorage.setItem("quizProgress", JSON.stringify(progressData));
-    }
+  const handleNext = () => {
+    setToast(null);
+    goToNextQuestionOrComplete();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,62 +75,9 @@ export default function LevelTwo() {
     }
   };
 
-  const getInputClasses = () => {
-    const baseClasses =
-      "w-full p-3 bg-slate-700 text-white rounded-lg border-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors";
-    if (validationStatus === "correct") {
-      return `${baseClasses} border-green-500`;
-    }
-    if (validationStatus === "incorrect") {
-      if (attemptsLeft === 0) {
-        return `${baseClasses} border-red-500 cursor-not-allowed`;
-      }
-      return `${baseClasses} border-red-500 `;
-    }
-    return `${baseClasses} border-slate-600`;
-  };
-
-  if (isLevelComplete) {
-    return <LevelComplete level="2" route="levelThree" />;
-  }
-
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: -1,
-        }}
-      >
-        <DotGrid
-          dotSize={9}
-          gap={15}
-          baseColor="#120953"
-          activeColor="#1481F5"
-          proximity={120}
-          shockRadius={250}
-          shockStrength={5}
-          resistance={750}
-          returnDuration={1.5}
-        />
-      </div>
-      {toast && (
-        <div
-          className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
-            toast.startsWith("✅")
-              ? "bg-green-600"
-              : toast.startsWith("⚠️")
-                ? "bg-yellow-600"
-                : "bg-red-600"
-          }`}
-        >
-          {toast}
-        </div>
-      )}
+    <div>
+      <Toast toast={toast} />
       <div className="w-full max-w-2xl text-white">
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
@@ -199,7 +97,7 @@ export default function LevelTwo() {
               id="userInput"
               type="text"
               name="userInput"
-              className={getInputClasses()}
+              className={getInputClasses(validationStatus, attemptsLeft)}
             />
             <div
               className="mt-[10px] font-semibold text-xl"
@@ -215,12 +113,12 @@ export default function LevelTwo() {
             </div>
           </div>
           <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">
-            {currentQuestionIndex + 1}/{level2Data.length}
+            {currentIndex + 1}/{level2Data.length}
           </div>
           <div className="mt-8 text-center h-14">
             {validationStatus === "correct" || attemptsLeft === 0 ? (
               <button
-                onClick={handleNextQuestion}
+                onClick={handleNext}
                 className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
               >
                 Next question
@@ -237,6 +135,6 @@ export default function LevelTwo() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
