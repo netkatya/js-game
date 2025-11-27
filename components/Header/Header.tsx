@@ -91,8 +91,10 @@ export default function Header() {
               Levels
             </Link>
           </li>
+          <li>
+            <LangSwitcher />
+          </li>
         </ul>
-        <LangSwitcher />
       </div>
 
       {isOpen && (
