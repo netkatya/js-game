@@ -33,7 +33,7 @@ export default function Legend() {
         </div>
         <div className="hidden md:flex md:w-[360px] md:h-[560px] bg-[#000017] justify-center items-center rounded-[16px]">
           <Image
-            src="/img/robotlegend.png"
+            src="/img/robot-legend.png"
             width={300}
             height={450}
             alt="robot"

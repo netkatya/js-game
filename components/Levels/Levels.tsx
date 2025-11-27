@@ -63,7 +63,7 @@ export default function Levels() {
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
             <Image
-              src="/img/level3new.png"
+              src="/img/level3.png"
               width={312}
               height={485}
               alt="level-three"
@@ -105,7 +105,7 @@ export default function Levels() {
             </div>
 
             <Image
-              src="/img/level4new.png"
+              src="/img/level4.png"
               width={312}
               height={485}
               alt="level-four"
@@ -113,7 +113,7 @@ export default function Levels() {
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
             <Image
-              src="/img/level5new.png"
+              src="/img/level5.png"
               width={312}
               height={485}
               alt="level-five"
