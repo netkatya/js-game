@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🤖 A.R.I. - Learn JavaScript
 
-## Getting Started
+**A.R.I. - Learn JavaScript** is an interactive game designed to **test and improve your JavaScript skills**.  
+Built with **Next.js + TypeScript** and **Tailwind CSS**, it features a modern interface, smooth animations, and multiple coding levels where you can write and execute real code in the browser.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🏠 Main Page
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Game introduction and legend  
+- Level descriptions and overview  
+- **Start** button to begin a new game  
+- **Continue** button to resume progress  
+- Player progress is saved in **Local Storage**, so you can pick up where you left off
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎮 Features
 
-## Learn More
+- 🧩 **Level 1 — Quiz**
+  - Single correct answer per question
+  - **1 attempt** to answer correctly
 
-To learn more about Next.js, take a look at the following resources:
+- ✍️ **Level 2 — Text Input**
+  - Answer questions directly using a text input
+  - **2 attempts** per question
+  - **Correct answer shown after wrong attempt** for learning
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 💻 **Levels 3–5 — Coding Challenges (Monaco Editor)**
+  - Live coding environment to write and execute JavaScript
+  - **3 attempts** to solve each challenge
+  - **Correct answer shown after wrong attempt** to help analyze mistakes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 📊 **End-of-game statistics**
+  - Summary of correct and incorrect answers for all levels
 
-## Deploy on Vercel
+- 🎨 **Modern UI & Animations**
+  - Clean, responsive design
+  - **React Lucid** for vector icons
+  - **ReactBits** for animated backgrounds
+  - **Framer Motion** for UI animations
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- ⚡ **Fast and responsive**
+  - Optimized for desktop and mobile
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 💡 Concept
+
+A.R.I. is designed for those who want **hands-on practice** rather than just reading theory.  
+Each level gradually increases in difficulty, from quizzes with a single attempt to live coding challenges with multiple tries.  
+After an incorrect answer (in Levels 2–5), the **correct solution is shown**, allowing players to analyze mistakes, learn, and remember the right answer.  
+The game tracks your progress and shows **end-of-game statistics**, helping you learn efficiently and stay motivated.
+
+---
+
+## 🧱 Technologies
+
+- **Next.js + TypeScript**  
+- **Tailwind CSS**  
+- **Monaco Editor**  
+- **React Lucid** (icons)  
+- **ReactBits** (animated backgrounds)  
+- **Framer Motion** (UI animations)  
+
+---
+
