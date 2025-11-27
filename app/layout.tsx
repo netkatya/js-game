@@ -4,7 +4,6 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Providers from "@/components/Providers/Providers";
-import LangSwitcher from "@/components/LangSwitcher/LangSwitcher";
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],
@@ -37,7 +36,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           {children}
-          <LangSwitcher />
+
           <Footer />
         </Providers>
       </body>

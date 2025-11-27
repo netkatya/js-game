@@ -106,7 +106,10 @@ export default function LevelTwo() {
   const question = questions[currentQuestionIndex];
 
   const handleCheckAnswer = () => {
-    if (userInput.trim().toLowerCase() === question.answer.toLowerCase()) {
+    if (
+      question.answer &&
+      userInput.trim().toLowerCase() === question.answer.toLowerCase()
+    ) {
       const updatedRight = rightAnswers + 1;
       setRightAnswers(updatedRight);
       setValidationStatus("correct");
