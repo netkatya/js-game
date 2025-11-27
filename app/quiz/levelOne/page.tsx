@@ -1,21 +1,64 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { QuizTask } from "@/types/quiz";
-import level1Data from "@/app/data/level1.json";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import DotGrid from "@/components/Dots/Dots";
 import { saveProgress } from "@/utils/save";
 
 export default function Level1Page() {
-  const questions: QuizTask[] = level1Data;
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
-  const [rightAnswers, setRightAnswers] = useState<number>(0);
-  const [wrongAnswers, setWrongAnswers] = useState<number>(0);
-  const [isAnswered, setIsAnswered] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<QuizTask[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [isLevelComplete, setIsLevelComplete] = useState(false);
+  const [rightAnswers, setRightAnswers] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState(0);
+  const [isAnswered, setIsAnswered] = useState(false);
+
+  // --- LANGUAGE DETECTOR ---
+  const getLang = () =>
+    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "en";
+
+  // --- LOAD QUESTIONS BY LANGUAGE ---
+  const loadQuestions = async () => {
+    setLoading(true);
+    const lang = getLang();
+
+    try {
+      const res = await fetch(`/data/${lang}/level1.json`);
+      const data = await res.json();
+      setQuestions(data);
+    } catch (e) {
+      console.error("Error loading questions:", e);
+    }
+
+    setLoading(false);
+  };
+
+  // Load questions on mount
   useEffect(() => {
+    loadQuestions();
+  }, []);
+
+  // Listen to language change from LangSwitcher
+  useEffect(() => {
+    const handler = () => loadQuestions();
+    window.addEventListener("quiz-lang-change", handler);
+    return () => window.removeEventListener("quiz-lang-change", handler);
+  }, []);
+
+  // Reset answer state on question change
+  useEffect(() => {
+    setSelectedAnswer(null);
+    setIsAnswered(false);
+  }, [currentQuestionIndex]);
+
+  // After questions loaded — restore progress
+  useEffect(() => {
+    if (!questions.length) return;
+
     const rawProgress = localStorage.getItem("quizProgress");
     if (rawProgress) {
       const progressData = JSON.parse(rawProgress);
@@ -33,12 +76,23 @@ export default function Level1Page() {
         setWrongAnswers(levelOneProgress.wrongAnswers || 0);
       }
     }
-  }, [questions.length]);
+  }, [questions]);
 
-  useEffect(() => {
-    setSelectedAnswer(null);
-    setIsAnswered(false);
-  }, [currentQuestionIndex]);
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-white text-xl">
+        Loading...
+      </main>
+    );
+  }
+
+  if (!questions.length) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-red-400 text-xl">
+        No questions loaded
+      </main>
+    );
+  }
 
   const question = questions[currentQuestionIndex];
 
@@ -57,6 +111,7 @@ export default function Level1Page() {
       newWrong++;
       setWrongAnswers(newWrong);
     }
+
     saveProgress(currentQuestionIndex, newRight, newWrong, "One");
   };
 
@@ -68,8 +123,10 @@ export default function Level1Page() {
       setCurrentQuestionIndex(nextIndex);
     } else {
       setIsLevelComplete(true);
+
       const rawProgress = localStorage.getItem("quizProgress") || "{}";
       const progressData = JSON.parse(rawProgress);
+
       progressData.lastActiveLevel = "levelTwo";
       if (!progressData.progress.levelTwo) {
         progressData.progress.levelTwo = {
@@ -78,23 +135,20 @@ export default function Level1Page() {
           wrongAnswers: 0,
         };
       }
+
       localStorage.setItem("quizProgress", JSON.stringify(progressData));
     }
   };
 
-  const getButtonClass = (option: string): string => {
-    const isCorrectAnswer = option === question.answer;
-    const isSelectedAnswer = option === selectedAnswer;
+  const getButtonClass = (option: string) => {
+    const isCorrect = option === question.answer;
+    const isSelected = option === selectedAnswer;
 
-    if (!selectedAnswer) {
-      return "bg-slate-700 hover:bg-slate-600";
-    }
-    if (isCorrectAnswer) {
-      return "bg-green-500";
-    }
-    if (isSelectedAnswer) {
-      return "bg-red-500";
-    }
+    if (!selectedAnswer) return "bg-slate-700 hover:bg-slate-600";
+
+    if (isCorrect) return "bg-green-500";
+    if (isSelected) return "bg-red-500";
+
     return "bg-slate-700 opacity-50";
   };
 
@@ -104,6 +158,7 @@ export default function Level1Page() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-[10px] md:p-4">
+      {/* Background */}
       <div
         style={{
           position: "absolute",
@@ -126,6 +181,7 @@ export default function Level1Page() {
           returnDuration={1.5}
         />
       </div>
+
       <div className="w-full max-w-2xl text-white">
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
@@ -133,11 +189,13 @@ export default function Level1Page() {
               Level 1: Tests
             </h1>
           </div>
+
           <h3 className="text-[16px] md:text-xl font-semibold text-center mb-8">
             {question.question}
           </h3>
+
           <div className="space-y-4">
-            {questions[currentQuestionIndex].options.map((option) => (
+            {question.options.map((option) => (
               <button
                 key={option}
                 onClick={() => handleAnswerClick(option)}
@@ -150,8 +208,9 @@ export default function Level1Page() {
               </button>
             ))}
           </div>
+
           <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">
-            {currentQuestionIndex + 1}/{level1Data.length}
+            {currentQuestionIndex + 1}/{questions.length}
           </div>
 
           <div className="mt-8 text-center h-14">

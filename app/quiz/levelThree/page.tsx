@@ -2,12 +2,8 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-
-import questions from "../../../app/data/level3.json";
 import DotGrid from "@/components/Dots/Dots";
 import LevelComplete from "@/components/LevelComplete/LevelComplete"; // Переконайтесь, що цей компонент існує
-
-// Припускаю, що у вас є утиліта saveProgress
 import { saveProgress } from "@/utils/save";
 
 const MonacoEditor = dynamic(

@@ -1,5 +1,5 @@
 "use client";
-import level2Data from "@/app/data/level2.json";
+
 import { useState, useEffect } from "react";
 import { InputTask } from "@/types/quiz";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
@@ -7,44 +7,78 @@ import DotGrid from "@/components/Dots/Dots";
 import { saveProgress } from "@/utils/save";
 
 export default function LevelTwo() {
-  const questions: InputTask[] = level2Data;
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [userInput, setUserInput] = useState<string>("");
-  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<InputTask[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [userInput, setUserInput] = useState("");
   const [validationStatus, setValidationStatus] = useState<
     "idle" | "correct" | "incorrect"
   >("idle");
-  const [attemptsLeft, setAttemptsLeft] = useState<number>(2);
-  const [rightAnswers, setRightAnswers] = useState<number>(0);
-  const [wrongAnswers, setWrongAnswers] = useState<number>(0);
+  const [attemptsLeft, setAttemptsLeft] = useState(2);
+  const [rightAnswers, setRightAnswers] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState(0);
+  const [isLevelComplete, setIsLevelComplete] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
+  // --- LANGUAGE DETECTOR ---
+  const getLang = () =>
+    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "en";
+
+  // --- LOAD QUESTIONS BY LANGUAGE ---
+  const loadQuestions = async () => {
+    setLoading(true);
+    const lang = getLang();
+    try {
+      const res = await fetch(`/data/${lang}/level2.json`);
+      const data = await res.json();
+      setQuestions(data);
+    } catch (e) {
+      console.error("Error loading questions:", e);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
+    loadQuestions();
+  }, []);
+
+  // Listen for language change
+  useEffect(() => {
+    const handler = () => loadQuestions();
+    window.addEventListener("quiz-lang-change", handler);
+    return () => window.removeEventListener("quiz-lang-change", handler);
+  }, []);
+
+  // Reset input on question change
+  useEffect(() => {
+    setUserInput("");
+    setValidationStatus("idle");
+    setAttemptsLeft(2);
+  }, [currentQuestionIndex]);
+
+  // Restore progress after questions loaded
+  useEffect(() => {
+    if (!questions.length) return;
+
     const rawProgress = localStorage.getItem("quizProgress");
     if (rawProgress) {
       const progressData = JSON.parse(rawProgress);
-      if (progressData.progress && progressData.progress["levelTwo"]) {
-        const levelProgress = progressData.progress["levelTwo"];
-
-        // ✅ ОСНОВНЕ ВИПРАВЛЕННЯ ТУТ
-
+      const levelProgress = progressData?.progress?.levelTwo;
+      if (levelProgress) {
         const savedIndex = levelProgress.question || 0;
         const savedRight = levelProgress.rightAnswers || 0;
         const savedWrong = levelProgress.wrongAnswers || 0;
-
-        // Рахуємо загальну кількість відповідей, щоб знати, чи почата гра
         const totalAnswers = savedRight + savedWrong;
 
         if (totalAnswers === 0) {
-          // Якщо гра не почата (0 відповідей), починаємо з першого питання
           setCurrentQuestionIndex(0);
         } else {
-          // Якщо гра почата, завантажуємо НАСТУПНЕ питання
-          const nextQuestionIndex = savedIndex + 1;
-          if (nextQuestionIndex >= questions.length) {
+          const nextIndex = savedIndex + 1;
+          if (nextIndex >= questions.length) {
             setIsLevelComplete(true);
           } else {
-            setCurrentQuestionIndex(nextQuestionIndex);
+            setCurrentQuestionIndex(nextIndex);
           }
         }
 
@@ -52,54 +86,49 @@ export default function LevelTwo() {
         setWrongAnswers(savedWrong);
       }
     }
-  }, [questions.length]);
+  }, [questions]);
+
   const showToast = (message: string, duration = 2000) => {
     setToast(message);
     setTimeout(() => setToast(null), duration);
   };
-  useEffect(() => {
-    setUserInput("");
-    setValidationStatus("idle");
-    setAttemptsLeft(2);
-  }, [currentQuestionIndex]);
+
+  if (loading)
+    return <p className="text-white text-xl text-center mt-10">Loading...</p>;
+  if (!questions.length)
+    return (
+      <p className="text-red-400 text-xl text-center mt-10">
+        No questions loaded
+      </p>
+    );
+  if (isLevelComplete) return <LevelComplete level="2" route="levelThree" />;
 
   const question = questions[currentQuestionIndex];
 
   const handleCheckAnswer = () => {
     if (userInput.trim().toLowerCase() === question.answer.toLowerCase()) {
-      const updatedRightAnswers = rightAnswers + 1;
-      setRightAnswers(updatedRightAnswers);
+      const updatedRight = rightAnswers + 1;
+      setRightAnswers(updatedRight);
       setValidationStatus("correct");
       showToast("✅ Correct!");
-      saveProgress(
-        currentQuestionIndex,
-        updatedRightAnswers,
-        wrongAnswers,
-        "Two"
-      );
+      saveProgress(currentQuestionIndex, updatedRight, wrongAnswers, "Two");
     } else {
-      const newAttemptsLeft = attemptsLeft - 1;
-      showToast(`❌ Incorrect. You have ${newAttemptsLeft} attempt(s) left.`);
-      setAttemptsLeft(newAttemptsLeft);
+      const newAttempts = attemptsLeft - 1;
+      setAttemptsLeft(newAttempts);
       setValidationStatus("incorrect");
-      if (newAttemptsLeft === 0) {
-        const updatedWrongAnswers = wrongAnswers + 1;
-        setWrongAnswers(updatedWrongAnswers);
-        showToast("❌ No attempts left. Look at the right answers");
-        saveProgress(
-          currentQuestionIndex,
-          rightAnswers,
-          updatedWrongAnswers,
-          "Two"
-        );
+      showToast(`❌ Incorrect. ${newAttempts} attempt(s) left.`);
+      if (newAttempts === 0) {
+        const updatedWrong = wrongAnswers + 1;
+        setWrongAnswers(updatedWrong);
+        showToast("❌ No attempts left. Look at the right answer.");
+        saveProgress(currentQuestionIndex, rightAnswers, updatedWrong, "Two");
       }
     }
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      const nextIndex = currentQuestionIndex + 1;
-      setCurrentQuestionIndex(nextIndex);
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
       setToast(null);
     } else {
       setIsLevelComplete(true);
@@ -117,31 +146,24 @@ export default function LevelTwo() {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInput(event.target.value);
-    if (validationStatus === "incorrect") {
-      setValidationStatus("idle");
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(e.target.value);
+    if (validationStatus === "incorrect") setValidationStatus("idle");
   };
 
   const getInputClasses = () => {
-    const baseClasses =
+    const base =
       "w-full p-3 bg-slate-700 text-white rounded-lg border-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors";
-    if (validationStatus === "correct") {
-      return `${baseClasses} border-green-500`;
-    }
-    if (validationStatus === "incorrect") {
-      if (attemptsLeft === 0) {
-        return `${baseClasses} border-red-500 cursor-not-allowed`;
-      }
-      return `${baseClasses} border-red-500 `;
-    }
-    return `${baseClasses} border-slate-600`;
+    if (validationStatus === "correct") return base + " border-green-500";
+    if (validationStatus === "incorrect")
+      return (
+        base +
+        (attemptsLeft === 0
+          ? " border-red-500 cursor-not-allowed"
+          : " border-red-500")
+      );
+    return base + " border-slate-600";
   };
-
-  if (isLevelComplete) {
-    return <LevelComplete level="2" route="levelThree" />;
-  }
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
@@ -167,19 +189,15 @@ export default function LevelTwo() {
           returnDuration={1.5}
         />
       </div>
+
       {toast && (
         <div
-          className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
-            toast.startsWith("✅")
-              ? "bg-green-600"
-              : toast.startsWith("⚠️")
-                ? "bg-yellow-600"
-                : "bg-red-600"
-          }`}
+          className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg ${toast.startsWith("✅") ? "bg-green-600" : "bg-red-600"}`}
         >
           {toast}
         </div>
       )}
+
       <div className="w-full max-w-2xl text-white">
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
@@ -188,35 +206,30 @@ export default function LevelTwo() {
               Attempts left: {attemptsLeft}
             </p>
           </div>
+
           <h3 className="text-xl font-semibold text-center mb-8">
             {question.question}
           </h3>
+
           <div className="space-y-4">
             <input
               value={userInput}
               onChange={handleChange}
               disabled={validationStatus === "correct" || attemptsLeft === 0}
-              id="userInput"
               type="text"
-              name="userInput"
               className={getInputClasses()}
             />
-            <div
-              className="mt-[10px] font-semibold text-xl"
-              style={{ minHeight: "32px" }}
-            >
-              {attemptsLeft === 0 && validationStatus === "incorrect" ? (
-                <p className="text-center text-green-400">
-                  Correct answer: <strong>{question.answer}</strong>
-                </p>
-              ) : (
-                <span>&nbsp;</span>
-              )}
-            </div>
+            {attemptsLeft === 0 && validationStatus === "incorrect" && (
+              <p className="text-center text-green-400 mt-2">
+                Correct answer: <strong>{question.answer}</strong>
+              </p>
+            )}
           </div>
-          <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">
-            {currentQuestionIndex + 1}/{level2Data.length}
+
+          <div className="mt-4 flex flex-row-reverse font-semibold text-xl">
+            {currentQuestionIndex + 1}/{questions.length}
           </div>
+
           <div className="mt-8 text-center h-14">
             {validationStatus === "correct" || attemptsLeft === 0 ? (
               <button
@@ -230,7 +243,6 @@ export default function LevelTwo() {
                 onClick={handleCheckAnswer}
                 disabled={!userInput}
                 className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="check button"
               >
                 Check
               </button>

@@ -3,6 +3,8 @@ import { Kelly_Slab, Rajdhani } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import Providers from "@/components/Providers/Providers";
+import LangSwitcher from "@/components/LangSwitcher/LangSwitcher";
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],
@@ -20,46 +22,24 @@ export const metadata: Metadata = {
   title: "A.R.I. — Learn JavaScript",
   description:
     "Help A.R.I. learn human logic through interactive JavaScript challenges.",
-  openGraph: {
-    title: "A.R.I. — Learn JavaScript",
-    description:
-      "Interactive coding game where you teach an AI through JavaScript challenges.",
-    url: "https://js-game-seven-indol.vercel.app/",
-    siteName: "A.R.I. Game",
-    images: [
-      {
-        url: "https://js-game-seven-indol.vercel.app/img/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "A.R.I. — JavaScript learning game",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "A.R.I. — Learn JavaScript",
-    description:
-      "Train your coding skills with A.R.I. — the AI that learns from your logic.",
-    images: ["https://js-game-seven-indol.vercel.app/img/og-image.png"],
-  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
         className={`${rajdhani.variable} ${kellySlab.variable} antialiased`}
       >
-        {" "}
-        <Header></Header>
-        {children}
-        <Footer></Footer>
+        <Providers>
+          <Header />
+          {children}
+          <LangSwitcher />
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

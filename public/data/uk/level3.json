@@ -1,0 +1,72 @@
+[
+  {
+    "id": 21,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть змінну name зі значенням 'Alice' та виведіть її в консоль",
+    "solution": "let name = 'Alice';\nconsole.log(name);"
+  },
+  {
+    "id": 22,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть стрілкову функцію greet, яка виводить 'Hello World' у консоль. Потім викличте цю функцію.",
+    "solution": "const greet = () => {\nconsole.log('Hello World');\n};\ngreet();"
+  },
+  {
+    "id": 23,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть дві змінні a = 7 та b = 3 і виведіть їх суму",
+    "solution": "let a = 7;\nlet b = 3;\nconsole.log(a + b);"
+  },
+  {
+    "id": 24,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть дві змінні a = 15 та b = 4 і виведіть залишок від ділення a на b",
+    "solution": "let a = 15;\nlet b = 4;\nconsole.log(a % b);"
+  },
+  {
+    "id": 25,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть рядкову змінну greeting = 'Hello' і виведіть її перший символ",
+    "solution": "let greeting = 'Hello';\nconsole.log(greeting[0]);"
+  },
+  {
+    "id": 26,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть змінні x = '5' та y = 3. Виведіть результат x + y",
+    "solution": "let x = '5';\nlet y = 3;\nconsole.log(x + y);"
+  },
+  {
+    "id": 27,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть змінну counter = 10, збільшіть її на 5 та виведіть результат",
+    "solution": "let counter = 10;\ncounter += 5;\nconsole.log(counter);"
+  },
+  {
+    "id": 28,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть змінні base = 2 та exponent = 4 і виведіть base у степені exponent",
+    "solution": "let base = 2;\nlet exponent = 4;\nconsole.log(base ** exponent);"
+  },
+  {
+    "id": 29,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть змінні x = 7 та y = '7'. Порівняйте їх за допомогою == та === і виведіть обидва результати",
+    "solution": "let x = 7;\nlet y = '7';\nconsole.log(x == y);\nconsole.log(x === y);"
+  },
+  {
+    "id": 30,
+    "type": "code",
+    "language": "javascript",
+    "question": "Створіть масив numbers = [1, 2, 3] і виведіть суму другого та третього елементів",
+    "solution": "let numbers = [1, 2, 3];\nconsole.log(numbers[1] + numbers[2]);"
+  }
+]

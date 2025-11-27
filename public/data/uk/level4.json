@@ -1,0 +1,72 @@
+[
+  {
+    "id": 31,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає найбільше з трьох чисел.",
+    "default": "function maxOfThree(a, b, c) {\n\n}",
+    "solution": "function maxOfThree(a, b, c) {\n  return Math.max(a, b, c);\n}"
+  },
+  {
+    "id": 32,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає рядок, складений з перших 3 символів іншого рядка.",
+    "default": "function firstNChars(str) {\n\n}",
+    "solution": "function firstNChars(str) {\n  return str.slice(0, 3);\n}"
+  },
+  {
+    "id": 33,
+    "type": "function",
+    "question": "Напишіть функцію, яка перевіряє, чи є число парним.",
+    "default": "function isEven(num) {\n\n}",
+    "solution": "function isEven(num) {\n  return num % 2 === 0;\n}"
+  },
+  {
+    "id": 34,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає мінімальне число в масиві.",
+    "default": "function minInArray(arr) {\n\n}",
+    "solution": "function minInArray(arr) {\n  return Math.min(...arr);\n}"
+  },
+  {
+    "id": 35,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає рядок у верхньому регістрі.",
+    "default": "function toUpperCase(str) {\n\n}",
+    "solution": "function toUpperCase(str) {\n  return str.toUpperCase();\n}"
+  },
+  {
+    "id": 36,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає довжину масиву.",
+    "default": "function arrayLength(arr) {\n\n}",
+    "solution": "function arrayLength(arr) {\n  return arr.length;\n}"
+  },
+  {
+    "id": 37,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає true, якщо число рівне 10.",
+    "default": "function isTen(num) {\n\n}",
+    "solution": "function isTen(num) {\n  return num === 10;\n}"
+  },
+  {
+    "id": 38,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає true, якщо рядок починається з 'JS'.",
+    "default": "function startsWithJS(str) {\n\n}",
+    "solution": "function startsWithJS(str) {\n  return str.startsWith('JS');\n}"
+  },
+  {
+    "id": 39,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає останні 2 символи рядка.",
+    "default": "function lastTwoChars(str) {\n\n}",
+    "solution": "function lastTwoChars(str) {\n  return str.slice(-2);\n}"
+  },
+  {
+    "id": 40,
+    "type": "function",
+    "question": "Напишіть функцію, яка повертає true, якщо число ділиться одночасно на 2 і на 3.",
+    "default": "function divisibleByTwoAndThree(num) {\n\n}",
+    "solution": "function divisibleByTwoAndThree(num) {\n  return num % 2 === 0 && num % 3 === 0; \n}"
+  }
+]

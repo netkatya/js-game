@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "type": "tests",
+        "question": "Що поверне вираз 2 + '2'?",
+        "options": ["4", "'22'", "Помилка"],
+        "answer": "'22'"
+    },
+    {
+        "id": 2,
+        "type": "tests",
+        "question": "Що робить оператор ===?",
+        "options": ["Порівнює значення без перевірки типу", "Порівнює і значення, і тип", "Присвоює значення"],
+        "answer": "Порівнює і значення, і тип"
+    },
+    {
+        "id": 3,
+        "type": "tests",
+        "question": "Що виведе console.log(typeof NaN)?",
+        "options": ["number", "NaN", "undefined"],
+        "answer": "number"
+    },
+    {
+        "id": 4,
+        "type": "tests",
+        "question": "Що станеться, якщо виконати console.log(x) перед let x = 5;?",
+        "options": ["Виведе undefined", "Викличе ReferenceError", "Виведе 5"],
+        "answer": "Викличе ReferenceError"
+    },
+    {
+        "id": 5,
+        "type": "tests",
+        "question": "Як вибрати перший елемент з класом 'button' у документі?",
+        "options": ["document.querySelector('.button')", "window.querySelector('.button')", "document.getElementsByClass('.button')"],
+        "answer": "document.querySelector('.button')"
+    },
+    {
+        "id": 6,
+        "type": "tests",
+        "question": "Який HTTP-метод використовується для відправки даних на сервер?",
+        "options": ["GET", "PUT", "POST"],
+        "answer": "POST"
+    },
+    {
+        "id": 7,
+        "type": "tests",
+        "question": "Який тип у змінної let x;",
+        "options": ["null", "object", "undefined"],
+        "answer": "undefined"
+    },
+    {
+        "id": 8,
+        "type": "tests",
+        "question": "Які можливі стани Promise?",
+        "options": ["pending, settled, failed", "waiting, fulfilled, rejected", "pending, fulfilled, rejected"],
+        "answer": "pending, fulfilled, rejected"
+    },
+    {
+        "id": 9,
+        "type": "tests",
+        "question": "Що робить метод .catch() у ланцюжку Promise?",
+        "options": ["Обробляє виконаний проміс", "Обробляє відхилений проміс", "Завжди виконується після .then()"],
+        "answer": "Обробляє відхилений проміс"
+    },
+    {
+        "id": 10,
+        "type": "tests",
+        "question": "Який метод використовується для читання даних з localStorage?",
+        "options": ["localStorage.readItem()", "localStorage.getItem()", "localStorage.getData()"],
+        "answer": "localStorage.getItem()"
+    }
+]
