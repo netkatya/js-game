@@ -4,8 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import LangSwitcher from "../LangSwitcher/LangSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
+  const { t, i18n } = useTranslation();
+  const [isMounted, setIsMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -19,7 +22,14 @@ export default function Header() {
       document.body.style.overflow = "auto";
     };
   }, [isOpen]);
-
+  useEffect(() => {
+    setIsMounted(true);
+    const savedLang = localStorage.getItem("quizLang");
+    if (savedLang && i18n.language !== savedLang) {
+      i18n.changeLanguage(savedLang);
+    }
+  }, [i18n]);
+  if (!isMounted) return null;
   return (
     <header className="bg-[#000017] px-6 md:px-10 flex justify-between items-center border-b-2 border-b-[#079CDE] shadow-[0_0_20px_#079CDE] text-[#079CDE] text-lg font-semibold sticky top-0 left-0 z-[999]">
       <Link href="/">
@@ -35,13 +45,13 @@ export default function Header() {
       <nav className="hidden md:block">
         <ul className="flex gap-[30px] text-2xl font-semibold">
           <li className="transition duration-300 hover:[text-shadow:0_0_10px_#079CDE]">
-            <Link href="/">Home</Link>
+            <Link href="/">{t("nav_home")}</Link>
           </li>
           <li className="transition duration-300 hover:[text-shadow:0_0_10px_#079CDE]">
-            <Link href="/#legend">About A.R.I</Link>
+            <Link href="/#legend">{t("nav_about")}</Link>
           </li>
           <li className="transition duration-300 hover:[text-shadow:0_0_10px_#079CDE]">
-            <Link href="/#levels">Levels</Link>
+            <Link href="/#levels">{t("nav_levels")}</Link>
           </li>
           <li>
             <LangSwitcher />
@@ -72,7 +82,7 @@ export default function Header() {
         <ul className="flex flex-col items-start p-6 gap-6 text-xl font-semibold">
           <li onClick={() => setIsOpen(false)}>
             <Link href="/" className="hover:[text-shadow:0_0_10px_#079CDE]">
-              Home
+              {t("nav_home")}
             </Link>
           </li>
           <li onClick={() => setIsOpen(false)}>
@@ -80,7 +90,7 @@ export default function Header() {
               href="/#legend"
               className="hover:[text-shadow:0_0_10px_#079CDE]"
             >
-              About A.R.I
+              {t("nav_about")}
             </Link>
           </li>
           <li onClick={() => setIsOpen(false)}>
@@ -88,7 +98,7 @@ export default function Header() {
               href="/#levels"
               className="hover:[text-shadow:0_0_10px_#079CDE]"
             >
-              Levels
+              {t("nav_levels")}
             </Link>
           </li>
           <li>

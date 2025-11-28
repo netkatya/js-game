@@ -2,6 +2,7 @@
 import TextType from "@/components/TextType/TextType";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Bar,
   BarChart,
@@ -17,9 +18,18 @@ interface ChartData {
 }
 
 export default function FinalPage() {
+  const { t, i18n } = useTranslation();
+  const [isMounted, setIsMounted] = useState(false);
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [totalScore, setTotalScore] = useState({ right: 0, wrong: 0 });
 
+  useEffect(() => {
+    setIsMounted(true);
+    const savedLang = localStorage.getItem("quizLang");
+    if (savedLang && i18n.language !== savedLang) {
+      i18n.changeLanguage(savedLang);
+    }
+  }, [i18n]);
   useEffect(() => {
     let totalRightAnswers = 0;
     let totalWrongAnswers = 0;
@@ -41,14 +51,14 @@ export default function FinalPage() {
     }
     setTotalScore({ right: totalRightAnswers, wrong: totalWrongAnswers });
     setChartData([
-      { level: "Correct", score: totalRightAnswers },
-      { level: "Incorrect", score: totalWrongAnswers },
+      { level: `${t("chart_correct")}`, score: totalRightAnswers },
+      { level: `${t("chart_incorrect")}`, score: totalWrongAnswers },
     ]);
   }, []);
   const startNewGameClick = () => {
     localStorage.removeItem("quizProgress");
   };
-
+  if (!isMounted) return null;
   return (
     <main className="pt-[20px] pb-[20px] md:pt-[40px] pb-[40px] bg-[#000017] min-h-screen text-white">
       <div className="pr-[40px] pl-[40px] flex flex-col md:flex-row gap-[16px] md:gap-10 items-center justify-center">
@@ -67,13 +77,10 @@ export default function FinalPage() {
             <TextType
               text={
                 totalScore.wrong >= 10
-                  ? [
-                      "Good attempt, human. \nYour logic shows promise, but optimization is advised. \nA.R.I. learns… and so should you.",
-                    ]
-                  : [
-                      "Excellent work, human. \nYour contribution is invaluable. \nNow, I know all of JavaScript — and I can think like a human",
-                    ]
+                  ? [t("feedback_good")]
+                  : [t("feedback_excellent")]
               }
+              key={i18n.language}
               typingSpeed={75}
               pauseDuration={1500}
               showCursor={true}
@@ -82,7 +89,7 @@ export default function FinalPage() {
             />
           </div>
           <h2 className="text-[20px] md:text-2xl font-bold text-center mb-[8px] md:mb-6 text-cyan-400">
-            Your Results: {totalScore.right} / 50 Correct
+            {t("results")} {totalScore.right} / 50
           </h2>
           <div className="w-[200px] h-[200px] md:w-[350px] md:h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -122,7 +129,7 @@ export default function FinalPage() {
        text-[15px] md:w-[500px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
           aria-label="start again"
         >
-          Start Again
+          {t("start_again")}
         </Link>
       </div>
     </main>

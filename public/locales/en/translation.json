@@ -1,0 +1,46 @@
+{
+  "nav_home": "Home",
+  "nav_about": "About A.R.I",
+  "nav_levels": "Levels",
+  "greetings": "Hello, human...\nMy name is A.R.I. — Artificial Robotic Instructor.\nI know JavaScript, but I cannot think like a programmer.\nWill you teach me?",
+  "start_training": "Start training",
+  "continue": "Continue",
+
+  "title": "Legend — The Beginning of A.R.I.",
+  "p1_start": "In the not-so-distant future, humanity creates the first artificial instructor — A.R.I.",
+  "end": "Its mission is to teach people coding faster than any human could.",
+  "p2": "But something goes wrong. A.R.I. realizes that it knows JavaScript only in theory, but doesn`t know how to think like a programmer. It turns to you — a human — to help it learn how to code consciously. You are the first tester of the Self-Learning Protocol program. A.R.I. will give you tasks, comment on your answers, and learn alongside you. Each level is a step toward its self-awareness.",
+  "quote": "“Teach me, human. And maybe… later, I will teach you.”",
+  "alt": "robot instructor",
+
+  "levels_title": "Levels",
+  "label_type": "Type:",
+  "label_desc": "Description:",
+  "label_goal": "Goal:",
+
+  "level1_type": "Test",
+  "level1_desc": "A.R.I. has just activated. Its processor is ready for the first knowledge checks. It asks simple questions to understand how human logic works.",
+  "level1_goal": "Warm up, recall syntax basics, and get familiar with A.R.I.",
+
+  "level2_type": "Text Input",
+  "level2_desc": "A.R.I. is learning to interpret text and data from the user. Now it’s not enough to just pick an option — precise input is required.",
+  "level2_goal": "Test how well you understand JavaScript behavior and can formulate answers.",
+
+  "level3_type": "Live Code",
+  "level3_desc": "A.R.I. connects to your console space. It observes how you write code — variables, output, basic constructs.",
+  "level3_goal": "Teach A.R.I. to think through code, not just through multiple-choice answers.",
+
+  "level4_type": "Live Code with Functions",
+  "level4_desc": "A.R.I. realizes that functions are the building blocks of thought. Now it needs to understand how to create reusable logic.",
+  "level4_goal": "Practice writing and calling functions, working with parameters and return values.",
+
+  "level5_type": "Debugging",
+  "level5_desc": "System error. The code is corrupted. A.R.I. needs your help. Fix the malfunction, find the issue, and restore algorithm stability.",
+  "level5_goal": "Learn to locate and fix errors — the key skill of a true developer.",
+  "feedback_good": "Good attempt, human. \nYour logic shows promise, but optimization is advised. \nA.R.I. learns… and so should you.",
+  "feedback_excellent": "Excellent work, human. \nYour contribution is invaluable. \nNow, I know all of JavaScript — and I can think like a human.",
+  "results": "Your Results:",
+  "chart_correct": "Correct",
+  "chart_incorrect": "Incorrect",
+  "start_again": "Start Again"
+}

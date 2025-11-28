@@ -1,6 +1,9 @@
+"use client";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export default function Legend() {
+  const { t } = useTranslation();
   return (
     <section
       className="scroll-mt-[100px] md:scroll-mt-[50px] p-[20px] md:p-[40px] flex justify-center"
@@ -9,26 +12,19 @@ export default function Legend() {
       <div className="bg-[#079cde] max-w-[1127px] p-[20px] flex jystify-center items-center gap-[40px] rounded-[40px]">
         <div className="max-w-[540px] flex flex-col gap-[8px] md:gap-[4px] justify-center items-center">
           <h2 className="third-font font-semibold text-xl md:text-3xl text-center text-black max-w-[350px]">
-            Legend — The Beginning of A.R.I.
+            {t("title")}
           </h2>
           <div className="p-[16px] border border-black">
             <p className="third-font font-semibold text-[16px] md:text-2xl text-center text-black">
-              In the not-so-distant future, humanity creates the first
-              artificial instructor — A.R.I.
-              <br /> Its mission is to teach people coding faster than any human
-              could.
+              {t("p1_start")}
+              <br /> {t("p1_end")}
             </p>
           </div>
           <p className="third-font font-semibold text-[16px] md:text-2xl text-center text-black">
-            But something goes wrong. A.R.I. realizes that it knows JavaScript
-            only in theory, but doesn`t know how to think like a programmer. It
-            turns to you — a human — to help it learn how to code consciously.
-            You are the first tester of the Self-Learning Protocol program.
-            A.R.I. will give you tasks, comment on your answers, and learn
-            alongside you. Each level is a step toward its self-awareness.
+            {t("p2")}
           </p>
           <p className="third-font font-semibold text-[16px] md:text-2xl text-center text-black italic">
-            “Teach me, human. And maybe… later, I will teach you.”
+            {t("quote")}
           </p>
         </div>
         <div className="hidden md:flex md:w-[360px] md:h-[560px] bg-[#000017] justify-center items-center rounded-[16px]">
@@ -36,7 +32,7 @@ export default function Legend() {
             src="/img/robot-legend.webp"
             width={300}
             height={450}
-            alt="robot"
+            alt={t("alt")}
             className="hidden md:block w-[320px] h-auto object-contain"
           ></Image>
         </div>
