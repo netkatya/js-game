@@ -36,5 +36,11 @@
 
   "level5_type": "Debugging",
   "level5_desc": "System error. The code is corrupted. A.R.I. needs your help. Fix the malfunction, find the issue, and restore algorithm stability.",
-  "level5_goal": "Learn to locate and fix errors — the key skill of a true developer."
+  "level5_goal": "Learn to locate and fix errors — the key skill of a true developer.",
+  "feedback_good": "Good attempt, human. \nYour logic shows promise, but optimization is advised. \nA.R.I. learns… and so should you.",
+  "feedback_excellent": "Excellent work, human. \nYour contribution is invaluable. \nNow, I know all of JavaScript — and I can think like a human.",
+  "results": "Your Results:",
+  "chart_correct": "Correct",
+  "chart_incorrect": "Incorrect",
+  "start_again": "Start Again"
 }
