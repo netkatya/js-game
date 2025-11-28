@@ -32,7 +32,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       message: "❌ Incorrect solution. Try again.",
     });
-  } catch (_err) {
+  } catch (err) {
+    console.error(err);
     return NextResponse.json({ message: "❌ Server error" });
   }
 }
