@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
-import questions from "../../data/level4.json";
 import DotGrid from "@/components/Dots/Dots";
 import { saveProgress } from "@/utils/save";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
@@ -13,60 +12,97 @@ const MonacoEditor = dynamic(
   { ssr: false }
 );
 
+type Question = {
+  question: string;
+  default: string;
+  solution: string;
+};
+
 export default function Level4Page() {
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [code, setCode] = useState(questions[0].default || "");
+  const [code, setCode] = useState("");
   const [toast, setToast] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(3);
   const [isSwitching, setIsSwitching] = useState(false);
-  const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
-  const [rightAnswers, setRightAnswers] = useState<number>(0);
-  const [wrongAnswers, setWrongAnswers] = useState<number>(0);
+  const [isLevelComplete, setIsLevelComplete] = useState(false);
+  const [rightAnswers, setRightAnswers] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState(0);
 
-  useEffect(() => {
-    const rawProgress = localStorage.getItem("quizProgress");
-    if (rawProgress) {
-      const progressData = JSON.parse(rawProgress);
-      if (progressData.progress && progressData.progress["levelFour"]) {
-        const levelProgress = progressData.progress["levelFour"];
-        const savedIndex = levelProgress.question || 0;
-        const savedRight = levelProgress.rightAnswers || 0;
-        const savedWrong = levelProgress.wrongAnswers || 0;
-        const totalAnswers = savedRight + savedWrong;
+  // --- DETECT LANGUAGE ---
+  const getLang = () =>
+    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "EN";
 
-        let nextQuestionIndex = 0;
-        if (totalAnswers > 0) {
-          nextQuestionIndex = savedIndex + 1;
-        }
-        if (nextQuestionIndex >= questions.length) {
-          setIsLevelComplete(true);
-        } else {
-          setCurrentIndex(nextQuestionIndex);
-          setCode(questions[nextQuestionIndex].default || "");
-          setRightAnswers(savedRight);
-          setWrongAnswers(savedWrong);
-        }
-      }
+  // --- LOAD QUESTIONS BY LANGUAGE ---
+  const loadQuestions = async () => {
+    const lang = getLang();
+    try {
+      const res = await fetch(`/data/${lang}/level4.json`);
+      const data: Question[] = await res.json();
+      setQuestions(data);
+      setCode(data[0]?.default || "");
+      restoreProgress(data);
+    } catch (err) {
+      console.error("Error loading Level 4:", err);
     }
+  };
+
+  // Load once
+  useEffect(() => {
+    loadQuestions();
   }, []);
+
+  // Re-load on language change
+  useEffect(() => {
+    const handler = () => loadQuestions();
+    window.addEventListener("quiz-lang-change", handler);
+    return () => window.removeEventListener("quiz-lang-change", handler);
+  }, []);
+
+  // --- RESTORE PROGRESS ---
+  const restoreProgress = (data: Question[]) => {
+    const raw = localStorage.getItem("quizProgress");
+    if (!raw) return;
+
+    const prog = JSON.parse(raw);
+    const level = prog?.progress?.levelFour;
+    if (!level) return;
+
+    const savedIndex = level.question || 0;
+    const savedRight = level.rightAnswers || 0;
+    const savedWrong = level.wrongAnswers || 0;
+
+    const next = savedRight + savedWrong > 0 ? savedIndex + 1 : 0;
+
+    if (next >= data.length) {
+      setIsLevelComplete(true);
+      return;
+    }
+
+    setCurrentIndex(next);
+    setRightAnswers(savedRight);
+    setWrongAnswers(savedWrong);
+    setCode(data[next].default || "");
+  };
+
+  const showToast = (msg: string, dur = 2000) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), dur);
+  };
 
   const handleNext = () => {
     setIsSwitching(false);
     const nextIndex = currentIndex + 1;
+
     if (nextIndex < questions.length) {
       setCurrentIndex(nextIndex);
       setCode(questions[nextIndex].default || "");
-      setToast(null);
       setAttempts(3);
+      setToast(null);
     } else {
       setIsLevelComplete(true);
     }
-  };
-
-  const showToast = (message: string, duration = 2000) => {
-    setToast(message);
-    setTimeout(() => setToast(null), duration);
   };
 
   const handleValidate = async () => {
@@ -75,7 +111,7 @@ export default function Level4Page() {
     setLoading(true);
     setToast(null);
 
-    const isLastQuestion = currentIndex === questions.length - 1;
+    const isLast = currentIndex === questions.length - 1;
 
     try {
       const res = await fetch("/api/validate", {
@@ -90,53 +126,58 @@ export default function Level4Page() {
       const data = await res.json();
 
       if (data.message.startsWith("✅")) {
-        const updatedRightAnswers = rightAnswers + 1;
-        setRightAnswers(updatedRightAnswers);
-        saveProgress(currentIndex, updatedRightAnswers, wrongAnswers, "Four");
+        const updatedRight = rightAnswers + 1;
+        setRightAnswers(updatedRight);
+        saveProgress(currentIndex, updatedRight, wrongAnswers, "Four");
 
-        if (isLastQuestion) {
+        if (isLast) {
           showToast("✅ Excellent! Level Complete!");
           setTimeout(() => setIsLevelComplete(true), 1500);
-          const rawProgress = localStorage.getItem("quizProgress") || "{}";
-          const progressData = JSON.parse(rawProgress);
-          progressData.lastActiveLevel = "levelFive";
-          if (!progressData.progress.levelFive) {
-            progressData.progress.levelFive = {
+
+          const raw = localStorage.getItem("quizProgress") || "{}";
+          const prog = JSON.parse(raw);
+          prog.lastActiveLevel = "levelFive";
+
+          if (!prog.progress.levelFive) {
+            prog.progress.levelFive = {
               question: -1,
               rightAnswers: 0,
               wrongAnswers: 0,
             };
           }
-          localStorage.setItem("quizProgress", JSON.stringify(progressData));
+
+          localStorage.setItem("quizProgress", JSON.stringify(prog));
         } else {
           setIsSwitching(true);
           showToast("✅ Correct! Moving to next question...");
           setTimeout(handleNext, 1500);
         }
+
         return;
       }
-      if (data.message.startsWith("❌")) {
-        const remaining = attempts - 1;
-        setAttempts(remaining);
-        if (remaining > 0) {
-          showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
-        } else {
-          const updatedWrongAnswers = wrongAnswers + 1;
-          setWrongAnswers(updatedWrongAnswers);
-          saveProgress(currentIndex, rightAnswers, updatedWrongAnswers, "Four");
-          setCode(questions[currentIndex].solution);
 
-          if (isLastQuestion) {
-            showToast("❌ No attempts left. Level Complete.");
-            setTimeout(() => setIsLevelComplete(true), 2500);
-          } else {
-            setIsSwitching(true);
-            showToast("❌ No attempts left. Moving to next question...");
-            setTimeout(handleNext, 2500);
-          }
+      // ❌ Incorrect
+      const remaining = attempts - 1;
+      setAttempts(remaining);
+
+      if (remaining > 0) {
+        showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
+      } else {
+        const updatedWrong = wrongAnswers + 1;
+        setWrongAnswers(updatedWrong);
+        saveProgress(currentIndex, rightAnswers, updatedWrong, "Four");
+        setCode(questions[currentIndex].solution);
+
+        if (isLast) {
+          showToast("❌ No attempts left. Level Complete.");
+          setTimeout(() => setIsLevelComplete(true), 2500);
+        } else {
+          setIsSwitching(true);
+          showToast("❌ No attempts left. Moving to next question...");
+          setTimeout(handleNext, 2500);
         }
       }
-    } catch (err) {
+    } catch (e) {
       showToast("❌ Server connection error");
     } finally {
       setLoading(false);
@@ -147,24 +188,17 @@ export default function Level4Page() {
     return <LevelComplete level="4" route="levelFive" />;
   }
 
-  if (!questions[currentIndex]) {
+  if (!questions.length) {
     return (
-      <main className="relative min-h-screen flex items-center justify-center p-4"></main>
+      <main className="min-h-screen flex items-center justify-center text-white text-xl">
+        Loading questions...
+      </main>
     );
   }
 
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: -1,
-        }}
-      >
+      <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
         <DotGrid
           dotSize={9}
           gap={15}
@@ -180,7 +214,7 @@ export default function Level4Page() {
 
       {toast && (
         <div
-          className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg transition-opacity duration-300 ${
+          className={`absolute top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white text-lg font-medium shadow-lg ${
             toast.startsWith("✅")
               ? "bg-green-600"
               : toast.startsWith("⚠️")
@@ -191,24 +225,27 @@ export default function Level4Page() {
           {toast}
         </div>
       )}
+
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
           <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-4 text-left">
             Level 4: Functions
           </h1>
           <strong>Task:</strong> {questions[currentIndex].question}
-          <div className="w-full mt-2 md:mt-4">
+          <div className="w-full mt-4">
             <MonacoEditor value={code} onChange={setCode} />
           </div>
-          <div className="mt-[10px] flex flex-row-reverse font-semibold text-xl">
+          <div className="mt-4 flex flex-row-reverse font-semibold text-xl">
             {currentIndex + 1}/{questions.length}
           </div>
         </div>
+
         <button
           onClick={handleValidate}
           disabled={loading || isSwitching}
-          className={`bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl ${loading || isSwitching ? "pointer-events-none opacity-50" : ""}`}
-          aria-label="check button"
+          className={`bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl ${
+            loading || isSwitching ? "opacity-50 pointer-events-none" : ""
+          }`}
         >
           {loading ? "Checking..." : "Check Solution"}
         </button>

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import LangSwitcher from "../LangSwitcher/LangSwitcher";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +42,9 @@ export default function Header() {
           </li>
           <li className="transition duration-300 hover:[text-shadow:0_0_10px_#079CDE]">
             <Link href="/#levels">Levels</Link>
+          </li>
+          <li>
+            <LangSwitcher />
           </li>
         </ul>
       </nav>
@@ -86,6 +90,9 @@ export default function Header() {
             >
               Levels
             </Link>
+          </li>
+          <li>
+            <LangSwitcher />
           </li>
         </ul>
       </div>

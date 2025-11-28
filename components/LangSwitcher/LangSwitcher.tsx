@@ -1,6 +1,9 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import Flag from "react-world-flags";
 
 export default function LangSwitcher() {
   const { i18n } = useTranslation();
@@ -8,27 +11,25 @@ export default function LangSwitcher() {
   const switchLang = (lang: "en" | "uk") => {
     i18n.changeLanguage(lang);
 
-    // сохранить язык для уровней
     localStorage.setItem("quizLang", lang);
 
-    // сообщить страницам, что язык сменился → нужно перезагрузить JSON
     window.dispatchEvent(new Event("quiz-lang-change"));
   };
 
   return (
-    <div className="flex gap-3 text-2xl fixed bottom-4 right-4 z-50">
+    <div className="flex gap-4">
       <button
         onClick={() => switchLang("en")}
-        className="p-2 hover:scale-110 transition"
+        className="hover:scale-110 transition"
       >
-        🇬🇧
+        <Flag code="GB" style={{ width: 40, height: 30 }} />
       </button>
 
       <button
         onClick={() => switchLang("uk")}
-        className="p-2 hover:scale-110 transition"
+        className="hover:scale-110 transition"
       >
-        🇺🇦
+        <Flag code="UA" style={{ width: 40, height: 30 }} />
       </button>
     </div>
   );

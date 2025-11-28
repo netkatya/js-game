@@ -10,25 +10,27 @@ export interface InputTask {
   id: number;
   type: string;
   question: string;
-  answer: string;
+  answer?: string;
+  default?: string;
+  solution?: string;
 }
 
 // Описуємо рівень-квіз
 export interface QuizLevel {
   levelId: number;
-  levelType: 'quiz';
+  levelType: "quiz";
   tasks: QuizTask[];
 }
 export interface InputLevel {
   levelId: number;
-  levelType: 'input';
+  levelType: "input";
   tasks: InputTask[];
 }
 
 // Описуємо рівень з кодом
 export interface CodeLevel {
   levelId: number;
-  levelType: 'code';
+  levelType: "code";
   task: {
     title: string;
     description: string;
@@ -39,7 +41,6 @@ export interface CodeLevel {
     }[];
   };
 }
-
 
 // Прогрес залишається без змін
 export interface Progress {

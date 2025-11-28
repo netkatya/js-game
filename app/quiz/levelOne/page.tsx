@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { QuizTask } from "@/types/quiz";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import DotGrid from "@/components/Dots/Dots";
@@ -18,36 +18,40 @@ export default function Level1Page() {
   const [isAnswered, setIsAnswered] = useState(false);
 
   // --- LANGUAGE DETECTOR ---
-  const getLang = () =>
-    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "en";
+  const getLang = useCallback(
+    () =>
+      typeof window !== "undefined"
+        ? localStorage.getItem("quizLang") || "en"
+        : "en",
+    []
+  );
 
   // --- LOAD QUESTIONS BY LANGUAGE ---
-  const loadQuestions = async () => {
+  const loadQuestions = useCallback(async () => {
     setLoading(true);
     const lang = getLang();
-
     try {
       const res = await fetch(`/data/${lang}/level1.json`);
       const data = await res.json();
       setQuestions(data);
     } catch (e) {
       console.error("Error loading questions:", e);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-  };
+  }, [getLang]);
 
   // Load questions on mount
   useEffect(() => {
     loadQuestions();
-  }, []);
+  }, [loadQuestions]);
 
   // Listen to language change from LangSwitcher
   useEffect(() => {
     const handler = () => loadQuestions();
     window.addEventListener("quiz-lang-change", handler);
     return () => window.removeEventListener("quiz-lang-change", handler);
-  }, []);
+  }, [loadQuestions]);
 
   // Reset answer state on question change
   useEffect(() => {
