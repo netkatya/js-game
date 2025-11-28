@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import TextType from "../TextType/TextType";
+import { useTranslation } from "react-i18next";
+
 interface ProgressData {
   lastActiveLevel: string;
   progress: {
@@ -11,6 +13,7 @@ interface ProgressData {
 }
 
 export default function Hero() {
+  const { t, i18n } = useTranslation();
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [continueLink, setContinueLink] = useState<string>("#");
 
@@ -24,7 +27,6 @@ export default function Hero() {
       }
     }
   }, []);
-
   const startNewGameClick = () => {
     localStorage.removeItem("quizProgress");
   };
@@ -48,10 +50,9 @@ export default function Hero() {
         <div className="font-semibold text-center w-[561px] h-[446px] mb-0 md:mb-[40px] md:w-[561px] md:h-[446px] w-auto h-auto">
           <div className="w-[290px] h-[130px] md:w-[543px] md:h-[200px]">
             <TextType
-              text={[
-                `Hello, human...\nMy name is A.R.I. — Artificial Robotic Instructor.\nI know JavaScript, but I cannot think like a programmer.\nWill you teach me?`,
-              ]}
+              text={[t("greetings")]}
               typingSpeed={75}
+              key={i18n.language}
               pauseDuration={1500}
               showCursor={true}
               cursorCharacter="|"
@@ -67,7 +68,7 @@ export default function Hero() {
        text-[15px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
                 aria-label="start button"
               >
-                Start training
+                {t("start_training")}
               </Link>
             </li>
 
@@ -84,7 +85,7 @@ export default function Hero() {
        text-[15px] md:text-[40px] transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE]"
                 aria-label="continue button"
               >
-                Continue
+                {t("continue")}
               </Link>
             </li>
           </ul>
