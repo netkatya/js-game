@@ -1,6 +1,9 @@
+"use client";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export default function Levels() {
+  const { t } = useTranslation();
   return (
     <section
       className="scroll-mt-[70px] md:scroll-mt-[50px] pt-[20px] md:pt-[60px] pb-[40px] flex justify-center"
@@ -8,7 +11,7 @@ export default function Levels() {
     >
       <div className="pl-[20px] pr-[20px] max-w-[1200px]">
         <h2 className="text-4xl md:text-8xl text-center mb-[16px] font-semibold">
-          Levels
+          {t("levels_title")}
         </h2>
         <ul className="flex flex-col gap-[40px] md:gap-[80px]">
           <li className="flex gap-[24px] md:gap-[184px] items-center">
@@ -17,41 +20,36 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-one"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Type: Test
+                {t("label_type")} {t("level1_type")}
               </p>
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Description: <br />
+                {t("label_desc")}{" "}
                 <span className="text-[16px] md:text-2xl font-normal">
-                  A.R.I. has just activated. Its processor is ready for the
-                  first knowledge checks. It asks simple questions to understand
-                  how human logic works.
+                  {t("level1_desc")}
                 </span>
               </p>
               <p className="text-[16px] md:text-2xl text-center">
-                Goal: Warm up, recall syntax basics, and get familiar with
-                A.R.I.
+                {t("label_goal")} {t("level1_goal")}
               </p>
             </div>
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Type: Text Input
+                {t("label_type")} {t("level2_type")}
               </p>
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Description:{" "}
+                {t("label_desc")}{" "}
                 <span className="text-[16px] md:text-2xl font-normal">
-                  A.R.I. is learning to interpret text and data from the user.
-                  Now it’s not enough to just pick an option — precise input is
-                  required.
+                  {t("level2_desc")}
                 </span>
               </p>
               <p className="text-[16px] md:text-2xl text-center">
-                Goal: Test how well you understand JavaScript behavior and can
-                formulate answers.
+                {t("label_goal")} {t("level2_goal")}
               </p>
             </div>
             <Image
@@ -59,6 +57,7 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-two"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
@@ -67,40 +66,36 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-three"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Type: Live Code
+                {t("label_type")} {t("level3_type")}
               </p>
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Description:{" "}
+                {t("label_desc")}{" "}
                 <span className="text-[16px] md:text-2xl font-normal">
-                  A.R.I. connects to your console space. It observes how you
-                  write code — variables, output, basic constructs.
+                  {t("level3_desc")}
                 </span>
               </p>
               <p className="text-[16px] md:text-2xl text-center">
-                Goal: Teach A.R.I. to think through code, not just through
-                multiple-choice answers.
+                {t("label_goal")} {t("level3_goal")}
               </p>
             </div>
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Type: Live Code with Functions
+                {t("label_type")} {t("level4_type")}
               </p>
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Description:{" "}
+                {t("label_desc")}{" "}
                 <span className="text-[16px] md:text-2xl font-normal">
-                  A.R.I. realizes that functions are the building blocks of
-                  thought. Now it needs to understand how to create reusable
-                  logic.
+                  {t("level4_desc")}
                 </span>
               </p>
               <p className="text-[16px] md:text-2xl text-center">
-                Goal: Practice writing and calling functions, working with
-                parameters and return values.
+                {t("label_goal")} {t("level4_goal")}
               </p>
             </div>
 
@@ -109,6 +104,7 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-four"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
@@ -117,22 +113,20 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-five"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Type: Debugging
+                {t("label_type")} {t("level5_type")}
               </p>
               <p className="text-[16px] md:text-2xl font-bold text-center">
-                Description:{" "}
+                {t("label_desc")}{" "}
                 <span className="text-[16px] md:text-2xl font-normal text-center">
-                  System error. The code is corrupted. A.R.I. needs your help.
-                  Fix the malfunction, find the issue, and restore algorithm
-                  stability.
+                  {t("level5_desc")}
                 </span>
               </p>
               <p className="text-[16px] md:text-2xl text-center">
-                Goal: Learn to locate and fix errors — the key skill of a true
-                developer.
+                {t("label_goal")} {t("level5_goal")}
               </p>
             </div>
           </li>

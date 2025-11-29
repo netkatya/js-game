@@ -1,8 +1,10 @@
 import Hero from "@/components/Hero/Hero";
+import I18nProvider from "@/components/I18nProvider/I18nProvider";
 import Legend from "@/components/Legend/Legend";
 import Levels from "@/components/Levels/Levels";
 import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton";
 import { Metadata } from "next";
+import { I18NProvider } from "next/dist/server/lib/i18n-provider";
 
 export const metadata: Metadata = {
   title: "A.R.I. — Learn JavaScript",
@@ -38,9 +40,11 @@ export default function App() {
   return (
     <main>
       <ScrollToTopButton />
-      <Hero />
-      <Legend />
-      <Levels />
+      <I18nProvider>
+        <Hero />
+        <Legend />
+        <Levels />
+      </I18nProvider>
     </main>
   );
 }

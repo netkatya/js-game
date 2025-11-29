@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import DotGrid from "@/components/Dots/Dots";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import { saveProgress } from "@/utils/save";
+import { useTranslation } from "react-i18next";
 
 type Question = {
   question: string;
@@ -16,6 +17,7 @@ const MonacoEditor = dynamic(() => import("@/components/Monaco/MonacoEditor"), {
 });
 
 export default function Level3Page() {
+  const { t } = useTranslation();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loadingQuestions, setLoadingQuestions] = useState(true);
 
@@ -119,18 +121,16 @@ export default function Level3Page() {
     setToast(null);
 
     const question = questions[currentIndex];
-
-    const originalSolution = question.solution; // ← ОРИГИНАЛ ДЛЯ ПОКАЗА
+    const originalSolution = question.solution;
     const isLast = currentIndex === questions.length - 1;
 
-    // Сравнение через нормализацию
     if (normalize(code) === normalize(originalSolution)) {
       const updatedRight = rightAnswers + 1;
       setRightAnswers(updatedRight);
       saveProgress(currentIndex, updatedRight, wrongAnswers, "Three");
 
       if (isLast) {
-        showToast("✅ Excellent! Level Complete!");
+        showToast(`✅ ${t("levelCompleted")}`);
         setTimeout(() => setIsLevelComplete(true), 1500);
 
         const raw = localStorage.getItem("quizProgress") || "{}";
@@ -145,7 +145,7 @@ export default function Level3Page() {
         }
         localStorage.setItem("quizProgress", JSON.stringify(data));
       } else {
-        showToast("✅ Correct! Moving to the next question...");
+        showToast(`✅ ${t("goingNextQuestion")}`);
         setIsSwitching(true);
         setTimeout(handleNext, 1500);
       }
@@ -159,21 +159,21 @@ export default function Level3Page() {
     setAttempts(remaining);
 
     if (remaining > 0) {
-      showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
+      showToast(
+        `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`
+      );
     } else {
       const updatedWrong = wrongAnswers + 1;
       setWrongAnswers(updatedWrong);
-
       saveProgress(currentIndex, rightAnswers, updatedWrong, "Three");
 
-      // Показываем оригинальный правильный ответ (с большой буквы!)
       setCode(originalSolution);
 
       if (isLast) {
-        showToast("❌ No attempts left. Level Complete.");
+        showToast(`❌ ${t("noAttemptsComplete")}`);
         setTimeout(() => setIsLevelComplete(true), 2000);
       } else {
-        showToast("❌ No attempts left. Moving to next question...");
+        showToast(`❌ ${t("noAttemptsNext")}`);
         setIsSwitching(true);
         setTimeout(handleNext, 2000);
       }
@@ -186,25 +186,23 @@ export default function Level3Page() {
   // RENDER
   // ---------------------------
   if (loadingQuestions)
-    return <p className="text-white text-xl text-center mt-10">Loading…</p>;
+    return (
+      <p className="text-white text-xl text-center mt-10">{t("loading")}</p>
+    );
 
   if (!questions.length)
     return (
       <p className="text-red-400 text-xl text-center mt-10">
-        No questions loaded
+        {t("no_questions")}
       </p>
     );
 
   if (isLevelComplete) return <LevelComplete level="3" route="levelFour" />;
 
   const question = questions[currentIndex];
-
   if (!question)
-    return <p className="text-white text-center mt-10">Loading question…</p>;
+    return <p className="text-white text-center mt-10">{t("loading")}</p>;
 
-  // ---------------------------
-  // UI
-  // ---------------------------
   return (
     <main className="relative min-h-screen flex items-center justify-center p-4">
       <div
@@ -243,9 +241,9 @@ export default function Level3Page() {
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
           <h1 className="text-xl md:text-2xl font-bold mb-4 text-left">
-            Level 3: Code
+            {t("levelThreeTitle")}
           </h1>
-          <strong>Task:</strong> {question.question}
+          <strong>{t("task")}</strong> {question.question}
           <div className="w-full mt-4">
             <MonacoEditor value={code} onChange={setCode} />
           </div>
@@ -261,7 +259,7 @@ export default function Level3Page() {
             loading || isSwitching ? "pointer-events-none opacity-50" : ""
           }`}
         >
-          {loading ? "Checking..." : "Check Solution"}
+          {loading ? t("checking") : t("checkSolution")}
         </button>
       </div>
     </main>
