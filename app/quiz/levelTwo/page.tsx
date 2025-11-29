@@ -5,8 +5,10 @@ import { InputTask } from "@/types/quiz";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import DotGrid from "@/components/Dots/Dots";
 import { saveProgress } from "@/utils/save";
+import { useTranslation } from "react-i18next";
 
 export default function LevelTwo() {
+  const { t } = useTranslation();
   const [questions, setQuestions] = useState<InputTask[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -94,11 +96,13 @@ export default function LevelTwo() {
   };
 
   if (loading)
-    return <p className="text-white text-xl text-center mt-10">Loading...</p>;
+    return (
+      <p className="text-white text-xl text-center mt-10">{t("loading")}</p>
+    );
   if (!questions.length)
     return (
       <p className="text-red-400 text-xl text-center mt-10">
-        No questions loaded
+        {t("no_questions")}
       </p>
     );
   if (isLevelComplete) return <LevelComplete level="2" route="levelThree" />;
@@ -113,17 +117,19 @@ export default function LevelTwo() {
       const updatedRight = rightAnswers + 1;
       setRightAnswers(updatedRight);
       setValidationStatus("correct");
-      showToast("✅ Correct!");
+      showToast(`✅ ${t("toastCorrect")}!`);
       saveProgress(currentQuestionIndex, updatedRight, wrongAnswers, "Two");
     } else {
       const newAttempts = attemptsLeft - 1;
       setAttemptsLeft(newAttempts);
       setValidationStatus("incorrect");
-      showToast(`❌ Incorrect. ${newAttempts} attempt(s) left.`);
+      showToast(
+        `❌ ${t("incorrect")}. ${newAttempts} ${t("toastLeftAttempts")}`
+      );
       if (newAttempts === 0) {
         const updatedWrong = wrongAnswers + 1;
         setWrongAnswers(updatedWrong);
-        showToast("❌ No attempts left. Look at the right answer.");
+        showToast(`❌ ${t("toastNoAttempts")}`);
         saveProgress(currentQuestionIndex, rightAnswers, updatedWrong, "Two");
       }
     }
@@ -204,9 +210,9 @@ export default function LevelTwo() {
       <div className="w-full max-w-2xl text-white">
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold mb-4">Level 2: Inputs</h1>
+            <h1 className="text-2xl font-bold mb-4">{t("levelTwo")}</h1>
             <p className="text-lg font-semibold text-yellow-400 mb-4">
-              Attempts left: {attemptsLeft}
+              {t("attempts")} {attemptsLeft}
             </p>
           </div>
 
@@ -224,7 +230,7 @@ export default function LevelTwo() {
             />
             {attemptsLeft === 0 && validationStatus === "incorrect" && (
               <p className="text-center text-green-400 mt-2">
-                Correct answer: <strong>{question.answer}</strong>
+                {t("correct")} <strong>{question.answer}</strong>
               </p>
             )}
           </div>
@@ -239,7 +245,7 @@ export default function LevelTwo() {
                 onClick={handleNextQuestion}
                 className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
               >
-                Next question
+                {t("next")}
               </button>
             ) : (
               <button
@@ -247,7 +253,7 @@ export default function LevelTwo() {
                 disabled={!userInput}
                 className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Check
+                {t("check")}
               </button>
             )}
           </div>
