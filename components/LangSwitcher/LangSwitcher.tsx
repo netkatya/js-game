@@ -4,8 +4,11 @@ import { useTranslation } from "react-i18next";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import Flag from "react-world-flags";
+interface LangSwitcherProps {
+  onSelect?: () => void;
+}
 
-export default function LangSwitcher() {
+export default function LangSwitcher({ onSelect }: LangSwitcherProps) {
   const { i18n } = useTranslation();
 
   const switchLang = (lang: "en" | "uk") => {
@@ -14,6 +17,9 @@ export default function LangSwitcher() {
     localStorage.setItem("quizLang", lang);
 
     window.dispatchEvent(new Event("quiz-lang-change"));
+    if (onSelect) {
+      onSelect();
+    }
   };
 
   return (
