@@ -2,6 +2,8 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import TextType from "../TextType/TextType";
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 
 interface LevelCompleteProps {
   level: string;
@@ -10,6 +12,16 @@ interface LevelCompleteProps {
 
 export default function LevelComplete({ level, route }: LevelCompleteProps) {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+    const savedLang = localStorage.getItem("quizLang");
+    if (savedLang && i18n.language !== savedLang) {
+      i18n.changeLanguage(savedLang);
+    }
+  }, [i18n]);
+  if (!isMounted) return null;
   return (
     <main
       className="flex items-center justify-center p-8
@@ -37,9 +49,8 @@ export default function LevelComplete({ level, route }: LevelCompleteProps) {
           <div>
             <div className="h-[100px] md:h-[200px] pt-[4px] pb-[4px] md:pt-16 md:pb-24">
               <TextType
-                text={[
-                  `Well done, human! Your logic is\n impressive. Advancing to the next\n level...`,
-                ]}
+                text={[t("wellDone")]}
+                key={i18n.language}
                 typingSpeed={75}
                 pauseDuration={1500}
                 showCursor={true}
@@ -49,14 +60,14 @@ export default function LevelComplete({ level, route }: LevelCompleteProps) {
             </div>
           </div>
           <h1 className="text-[36px] md:text-4xl font-bold text-white mb-[16px] md:mb-16">
-            Level {level} Complete!
+            {t("level")} {level} {t("complete")}
           </h1>
           <button
             onClick={() => router.push(`/quiz/${route}`)}
             className="w-[300px] md:w-[420px] min-h-[60px] md:min-h-[80px] p-3 text-center border-3 border-solid border-[#079cde] rounded-md 
                  transition-shadow duration-300 hover:shadow-[0_0_20px_#079CDE] text-[16px] md:text-2xl font-semibold"
           >
-            Go to the next Level
+            {t("nextLevel")}
           </button>
         </div>
       </div>

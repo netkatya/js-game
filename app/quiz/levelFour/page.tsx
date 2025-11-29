@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import DotGrid from "@/components/Dots/Dots";
 import { saveProgress } from "@/utils/save";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
+import { useTranslation } from "react-i18next";
 
 const MonacoEditor = dynamic(
   () => import("../../../components/Monaco/MonacoEditor"),
@@ -19,6 +20,7 @@ type Question = {
 };
 
 export default function Level4Page() {
+  const { t } = useTranslation();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [code, setCode] = useState("");
@@ -131,7 +133,7 @@ export default function Level4Page() {
         saveProgress(currentIndex, updatedRight, wrongAnswers, "Four");
 
         if (isLast) {
-          showToast("✅ Excellent! Level Complete!");
+          showToast(`✅ ${t("levelCompleted")}`);
           setTimeout(() => setIsLevelComplete(true), 1500);
 
           const raw = localStorage.getItem("quizProgress") || "{}";
@@ -149,7 +151,7 @@ export default function Level4Page() {
           localStorage.setItem("quizProgress", JSON.stringify(prog));
         } else {
           setIsSwitching(true);
-          showToast("✅ Correct! Moving to next question...");
+          showToast(`✅ ${t("goingNextQuestion")}`);
           setTimeout(handleNext, 1500);
         }
 
@@ -161,7 +163,9 @@ export default function Level4Page() {
       setAttempts(remaining);
 
       if (remaining > 0) {
-        showToast(`❌ Incorrect. You have ${remaining} attempt(s) left.`);
+        showToast(
+          `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`
+        );
       } else {
         const updatedWrong = wrongAnswers + 1;
         setWrongAnswers(updatedWrong);
@@ -169,16 +173,16 @@ export default function Level4Page() {
         setCode(questions[currentIndex].solution);
 
         if (isLast) {
-          showToast("❌ No attempts left. Level Complete.");
+          showToast(`❌ ${t("noAttemptsComplete")}`);
           setTimeout(() => setIsLevelComplete(true), 2500);
         } else {
           setIsSwitching(true);
-          showToast("❌ No attempts left. Moving to next question...");
+          showToast(`❌ ${t("noAttemptsNext")}`);
           setTimeout(handleNext, 2500);
         }
       }
     } catch (e) {
-      showToast("❌ Server connection error");
+      showToast(`❌ ${t("serverProblem")}`);
     } finally {
       setLoading(false);
     }
@@ -191,7 +195,7 @@ export default function Level4Page() {
   if (!questions.length) {
     return (
       <main className="min-h-screen flex items-center justify-center text-white text-xl">
-        Loading questions...
+        {t("loading")}
       </main>
     );
   }
@@ -229,9 +233,9 @@ export default function Level4Page() {
       <div className="flex flex-col gap-4 items-center w-full max-w-2xl mx-auto">
         <div className="p-4 bg-gray-800 rounded-lg text-white w-full text-xl font-semibold text-center">
           <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-4 text-left">
-            Level 4: Functions
+            {t("levelFourTitle")}
           </h1>
-          <strong>Task:</strong> {questions[currentIndex].question}
+          <strong>{t("task")}</strong> {questions[currentIndex].question}
           <div className="w-full mt-4">
             <MonacoEditor value={code} onChange={setCode} />
           </div>
@@ -247,7 +251,7 @@ export default function Level4Page() {
             loading || isSwitching ? "opacity-50 pointer-events-none" : ""
           }`}
         >
-          {loading ? "Checking..." : "Check Solution"}
+          {loading ? `${t("checking")}` : `${t("checkSolution")}`}
         </button>
       </div>
     </main>

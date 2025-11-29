@@ -5,11 +5,12 @@ import { QuizTask } from "@/types/quiz";
 import LevelComplete from "@/components/LevelComplete/LevelComplete";
 import DotGrid from "@/components/Dots/Dots";
 import { saveProgress } from "@/utils/save";
+import { useTranslation } from "react-i18next";
 
 export default function Level1Page() {
+  const { t } = useTranslation();
   const [questions, setQuestions] = useState<QuizTask[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isLevelComplete, setIsLevelComplete] = useState(false);
@@ -85,7 +86,7 @@ export default function Level1Page() {
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center text-white text-xl">
-        Loading...
+        {t("loading")}
       </main>
     );
   }
@@ -93,7 +94,7 @@ export default function Level1Page() {
   if (!questions.length) {
     return (
       <main className="min-h-screen flex items-center justify-center text-red-400 text-xl">
-        No questions loaded
+        {t("no_questions")}
       </main>
     );
   }
@@ -190,7 +191,7 @@ export default function Level1Page() {
         <div className="p-8 bg-slate-800 rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
             <h1 className="text-xl md:text-2xl font-bold mb-4">
-              Level 1: Tests
+              {t("levelOneTitle")}
             </h1>
           </div>
 
@@ -224,7 +225,7 @@ export default function Level1Page() {
                 className="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-lg text-xl"
                 aria-label="check button"
               >
-                Next question
+                {t("next")}
               </button>
             )}
           </div>
