@@ -110,7 +110,7 @@ export default function Level3Page() {
 
   // NORMALIZATION FOR CHECK
   const normalize = (str: string) =>
-    str.trim().replace(/\s+/g, " ").toLowerCase();
+    str.trim().replace(/\s+/g, " ").replace(/['"]/g, '"').toLowerCase();
 
   // ---------------------------
   // VALIDATION
