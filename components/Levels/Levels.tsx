@@ -20,6 +20,7 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-one"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">
@@ -56,6 +57,7 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-two"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
@@ -64,6 +66,7 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-three"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">
@@ -101,6 +104,7 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-four"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
           </li>
           <li className="flex gap-[24px] md:gap-[184px] items-center">
@@ -109,6 +113,7 @@ export default function Levels() {
               width={312}
               height={485}
               alt="level-five"
+              className="w-[200px] h-auto md:w-[312px]"
             ></Image>
             <div className="flex flex-col gap-[8px] max-w-[540px]">
               <p className="text-[16px] md:text-2xl font-bold text-center">

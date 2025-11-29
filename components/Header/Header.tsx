@@ -102,7 +102,7 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <LangSwitcher />
+            <LangSwitcher onSelect={() => setIsOpen(false)} />
           </li>
         </ul>
       </div>
