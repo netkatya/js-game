@@ -31,7 +31,7 @@ export default function Level3Page() {
   const [isLevelComplete, setIsLevelComplete] = useState<boolean>(false);
 
   // ---------------------------
-  // LANGUAGE HANDLING
+  // LANGUAGE + LOADING
   // ---------------------------
   const getLang = () =>
     (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "en";
@@ -53,7 +53,6 @@ export default function Level3Page() {
     loadQuestions();
   }, []);
 
-  // Reload when language changes
   useEffect(() => {
     const handler = () => loadQuestions();
     window.addEventListener("quiz-lang-change", handler);
@@ -75,17 +74,14 @@ export default function Level3Page() {
         const savedIndex = levelProgress.question || 0;
         const savedRight = levelProgress.rightAnswers || 0;
         const savedWrong = levelProgress.wrongAnswers || 0;
+
         const totalAnswers = savedRight + savedWrong;
-
-        let nextIndex = 0;
-
-        if (totalAnswers > 0) nextIndex = savedIndex + 1;
+        const nextIndex = totalAnswers > 0 ? savedIndex + 1 : 0;
 
         if (nextIndex >= questions.length) {
           setIsLevelComplete(true);
         } else {
           setCurrentIndex(nextIndex);
-          setCode("");
         }
 
         setRightAnswers(savedRight);
@@ -94,14 +90,13 @@ export default function Level3Page() {
     }
   }, [questions]);
 
+  // TOAST
   const showToast = (message: string, duration = 2000) => {
     setToast(message);
     setTimeout(() => setToast(null), duration);
   };
 
-  // ---------------------------
   // NEXT QUESTION
-  // ---------------------------
   const handleNext = () => {
     const nextIndex = currentIndex + 1;
     setCurrentIndex(nextIndex);
@@ -110,6 +105,10 @@ export default function Level3Page() {
     setAttempts(3);
     setIsSwitching(false);
   };
+
+  // NORMALIZATION FOR CHECK
+  const normalize = (str: string) =>
+    str.trim().replace(/\s+/g, " ").toLowerCase();
 
   // ---------------------------
   // VALIDATION
@@ -121,12 +120,11 @@ export default function Level3Page() {
 
     const question = questions[currentIndex];
 
-    const correctSolution = question?.solution?.toLowerCase?.() || "";
-
+    const originalSolution = question.solution; // ← ОРИГИНАЛ ДЛЯ ПОКАЗА
     const isLast = currentIndex === questions.length - 1;
 
-    if (code.trim().toLowerCase() === correctSolution) {
-      // correct
+    // Сравнение через нормализацию
+    if (normalize(code) === normalize(originalSolution)) {
       const updatedRight = rightAnswers + 1;
       setRightAnswers(updatedRight);
       saveProgress(currentIndex, updatedRight, wrongAnswers, "Three");
@@ -156,7 +154,7 @@ export default function Level3Page() {
       return;
     }
 
-    // incorrect
+    // INCORRECT
     const remaining = attempts - 1;
     setAttempts(remaining);
 
@@ -165,9 +163,11 @@ export default function Level3Page() {
     } else {
       const updatedWrong = wrongAnswers + 1;
       setWrongAnswers(updatedWrong);
+
       saveProgress(currentIndex, rightAnswers, updatedWrong, "Three");
 
-      setCode(correctSolution);
+      // Показываем оригинальный правильный ответ (с большой буквы!)
+      setCode(originalSolution);
 
       if (isLast) {
         showToast("❌ No attempts left. Level Complete.");
@@ -183,10 +183,10 @@ export default function Level3Page() {
   };
 
   // ---------------------------
-  // RENDER STATES
+  // RENDER
   // ---------------------------
   if (loadingQuestions)
-    return <p className="text-white text-xl text-center mt-10">Loading...</p>;
+    return <p className="text-white text-xl text-center mt-10">Loading…</p>;
 
   if (!questions.length)
     return (
