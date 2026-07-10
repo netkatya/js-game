@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const MonacoEditor = dynamic(
   () => import("../../../components/Monaco/MonacoEditor"),
-  { ssr: false }
+  { ssr: false },
 );
 
 type Question = {
@@ -34,8 +34,11 @@ export default function LevelFivePage() {
   const [wrongAnswers, setWrongAnswers] = useState(0);
 
   // --- LANGUAGE DETECTOR ---
-  const getLang = () =>
-    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "EN";
+  const getLang = () => {
+    if (typeof window === "undefined") return "en";
+
+    return (localStorage.getItem("quizLang") || "en").toLowerCase();
+  };
 
   // --- LOAD QUESTIONS ---
   const loadQuestions = async () => {
@@ -163,7 +166,7 @@ export default function LevelFivePage() {
 
       if (remaining > 0) {
         showToast(
-          `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`
+          `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`,
         );
       } else {
         const updatedWrong = wrongAnswers + 1;

@@ -33,8 +33,11 @@ export default function Level4Page() {
   const [wrongAnswers, setWrongAnswers] = useState(0);
 
   // --- DETECT LANGUAGE ---
-  const getLang = () =>
-    (typeof window !== "undefined" && localStorage.getItem("quizLang")) || "EN";
+  const getLang = () => {
+    if (typeof window === "undefined") return "en";
+
+    return (localStorage.getItem("quizLang") || "en").toLowerCase();
+  };
 
   // --- LOAD QUESTIONS BY LANGUAGE ---
   const loadQuestions = async () => {
