@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 
 const MonacoEditor = dynamic(
   () => import("../../../components/Monaco/MonacoEditor"),
-  { ssr: false }
+  { ssr: false },
 );
 
 type Question = {
@@ -36,7 +36,9 @@ export default function Level4Page() {
   const getLang = () => {
     if (typeof window === "undefined") return "en";
 
-    return (localStorage.getItem("quizLang") || "en").toLowerCase();
+    const savedLang = localStorage.getItem("quizLang");
+
+    return (savedLang || "en").toLowerCase();
   };
 
   // --- LOAD QUESTIONS BY LANGUAGE ---
@@ -167,7 +169,7 @@ export default function Level4Page() {
 
       if (remaining > 0) {
         showToast(
-          `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`
+          `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`,
         );
       } else {
         const updatedWrong = wrongAnswers + 1;

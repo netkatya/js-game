@@ -37,7 +37,9 @@ export default function LevelFivePage() {
   const getLang = () => {
     if (typeof window === "undefined") return "en";
 
-    return (localStorage.getItem("quizLang") || "en").toLowerCase();
+    const savedLang = localStorage.getItem("quizLang");
+
+    return (savedLang || "en").toLowerCase();
   };
 
   // --- LOAD QUESTIONS ---
