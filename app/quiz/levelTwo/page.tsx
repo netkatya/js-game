@@ -96,9 +96,7 @@ export default function LevelTwo() {
   };
 
   if (loading)
-    return (
-      <p className="text-white text-xl text-center mt-10">{t("loading")}</p>
-    );
+    return <p className="text-white text-xl text-center mt-10">Loading...</p>;
   if (!questions.length)
     return (
       <p className="text-red-400 text-xl text-center mt-10">
@@ -124,7 +122,7 @@ export default function LevelTwo() {
       setAttemptsLeft(newAttempts);
       setValidationStatus("incorrect");
       showToast(
-        `❌ ${t("incorrect")}. ${newAttempts} ${t("toastLeftAttempts")}`
+        `❌ ${t("incorrect")}. ${newAttempts} ${t("toastLeftAttempts")}`,
       );
       if (newAttempts === 0) {
         const updatedWrong = wrongAnswers + 1;

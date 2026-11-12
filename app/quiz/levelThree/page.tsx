@@ -160,7 +160,7 @@ export default function Level3Page() {
 
     if (remaining > 0) {
       showToast(
-        `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`
+        `❌ ${t("incorrect")}. ${t("you")} ${remaining} ${t("youAttempts")}`,
       );
     } else {
       const updatedWrong = wrongAnswers + 1;
@@ -186,9 +186,7 @@ export default function Level3Page() {
   // RENDER
   // ---------------------------
   if (loadingQuestions)
-    return (
-      <p className="text-white text-xl text-center mt-10">{t("loading")}</p>
-    );
+    return <p className="text-white text-xl text-center mt-10">Loading...</p>;
 
   if (!questions.length)
     return (

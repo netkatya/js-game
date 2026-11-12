@@ -24,7 +24,7 @@ export default function Level1Page() {
       typeof window !== "undefined"
         ? localStorage.getItem("quizLang") || "en"
         : "en",
-    []
+    [],
   );
 
   // --- LOAD QUESTIONS BY LANGUAGE ---
@@ -86,7 +86,7 @@ export default function Level1Page() {
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center text-white text-xl">
-        {t("loading")}
+        Loading...
       </main>
     );
   }
@@ -206,7 +206,7 @@ export default function Level1Page() {
                 onClick={() => handleAnswerClick(option)}
                 disabled={isAnswered}
                 className={`w-full text-left p-4 rounded-lg transition-colors duration-300 ${getButtonClass(
-                  option
+                  option,
                 )}`}
               >
                 {option}

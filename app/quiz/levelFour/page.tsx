@@ -200,7 +200,7 @@ export default function Level4Page() {
   if (!questions.length) {
     return (
       <main className="min-h-screen flex items-center justify-center text-white text-xl">
-        {t("loading")}
+        Loading...
       </main>
     );
   }
